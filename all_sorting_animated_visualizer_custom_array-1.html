@@ -1,0 +1,413 @@
+<!doctype html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>All Sorting Algorithms — Animated Visualizer</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#121212;color:#eee;font-family:system-ui,-apple-system,Segoe UI,Noto Sans Bengali,sans-serif}
+.wrap{max-width:980px;margin:auto;padding:14px}
+h1{text-align:center;font-size:24px;margin:8px 0 14px}
+.card{background:#202020;border:1px solid #444;border-radius:22px;overflow:hidden}
+.tabs{display:flex;gap:7px;padding:12px;overflow-x:auto;border-bottom:1px solid #444}
+.tab{white-space:nowrap;border:1px solid #555;background:#292929;color:#eee;border-radius:999px;padding:9px 14px;cursor:pointer}
+.tab.active{background:#3b82f6;border-color:#3b82f6}
+.head{text-align:center;padding:17px 18px 8px}.title{font-weight:750;font-size:18px}
+.desc{color:#aaa;font-size:14px;margin-top:7px;min-height:42px}
+.legend{display:flex;justify-content:center;gap:16px;color:#aaa;font-size:12px;margin-top:9px;flex-wrap:wrap}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:#3b82f6;margin-right:4px}
+.dot.p{background:#a855f7}.dot.f{background:#777}.dot.c{background:#f59e0b}
+.viz{height:300px;margin:34px 18px 0;position:relative;border-bottom:1px solid #555}
+.bar{position:absolute;left:0;bottom:0;width:42px;border:1px solid #555;border-bottom:0;border-radius:10px 10px 0 0;background:#2b2b2b;display:flex;justify-content:center;align-items:flex-start;padding-top:7px;font-weight:700;overflow:hidden;will-change:transform;transition:background .35s,opacity .35s}
+.bar.compare{background:#245ca8;outline:3px solid #60a5fa;outline-offset:2px;overflow:visible}
+.bar.pivot{background:#7e22ce;outline:3px solid #c084fc;outline-offset:3px;overflow:visible}
+.bar.minimum{background:#b45309;outline:3px solid #fbbf24;outline-offset:2px;overflow:visible}
+.bar.fixed{opacity:.45}
+.bar.key{background:#b45309;outline:3px solid #fbbf24;outline-offset:2px;overflow:visible}
+.bar.mergeA{background:#2563eb}.bar.mergeB{background:#7c3aed}
+.bar.swap{animation:swapPulse .7s ease}
+@keyframes swapPulse{0%{filter:brightness(1)}45%{filter:brightness(1.8)}100%{filter:brightness(1)}}
+.indices{position:relative;height:24px;margin:0 18px;color:#888;font-size:11px}
+.idx{position:absolute;top:6px;text-align:center}
+.array{text-align:center;color:#aaa;font-family:monospace;margin:8px 10px 14px}
+.controls{border-top:1px solid #444;padding:14px}
+.range{display:flex;align-items:center;gap:9px;color:#aaa;font-size:12px}.range input{width:100%}
+.buttons{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:13px}
+.btn{border:1px solid #555;background:#292929;color:#eee;border-radius:999px;padding:10px 15px;cursor:pointer}
+.btn.primary{background:#3b82f6;border-color:#3b82f6}
+.speed{max-width:260px;margin:12px auto 0}
+.note{text-align:center;color:#888;font-size:12px;margin:13px 0}.input-card button{font-family:inherit}
+@media(max-width:650px){.wrap{padding:7px}.viz{height:255px;margin:34px 7px 0}.indices{margin:0 7px}.tab{padding:8px 11px}.btn{padding:9px 12px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>📊 All Sorting Algorithms — Animated</h1>
+<div class="input-card" style="background:#202020;border:1px solid #444;border-radius:18px;padding:14px;margin-bottom:12px">
+  <div style="font-weight:700;margin-bottom:8px">Array বেছে নাও</div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap">
+    <input id="customArray" value="7,3,8,2,6,1" placeholder="যেমন: 7, 3, 8, 2, 6, 1"
+      style="flex:1;min-width:220px;background:#292929;color:#eee;border:1px solid #555;border-radius:999px;padding:11px 15px;outline:none">
+    <button id="useCustom" class="btn primary" type="button">Custom Array চালাও</button>
+    <button id="useDefault" class="btn" type="button">Default Array</button>
+  </div>
+  <div id="inputMsg" style="color:#999;font-size:12px;margin-top:8px">
+    Default: [7, 3, 8, 2, 6, 1] — Custom array-তে 2 থেকে 20টি integer দাও (0 থেকে 999), comma বা space দিয়ে আলাদা করো।
+  </div>
+</div>
+<div class="card">
+<div class="tabs" id="tabs"></div>
+<div id="panel"></div>
+</div>
+<div class="note">Custom Array দিলে একই array দিয়ে সব sorting algorithm test করা যাবে • Play চাপলে animation চলবে • এক ধাপ এগোন / আগের ধাপ দিয়ে ধাপে ধাপে দেখো • Swap হলে দুইটি bar বিপরীত দিকে সরে জায়গা বদলাবে (একটি উপর দিয়ে পার হবে)</div>
+</div>
+
+<script>
+const ALGOS={};
+
+/* ---------- helper ---------- */
+const bn=n=>String(n).replace(/[0-9]/g,x=>"০১২৩৪৫৬৭৮৯"[x]);
+// প্রতিটি element-এর একটি id আছে, যাতে duplicate value থাকলেও bar ঠিকভাবে track করা যায়
+const mk=input=>input.map((v,i)=>({id:i,v}));
+const snap=(A,x)=>Object.assign({o:A.map(e=>e.id),a:A.map(e=>e.v)},x);
+const range=(a,b)=>{const r=[];for(let i=a;i<=b;i++)r.push(i);return r};
+const swp=(A,i,j)=>{const t=A[i];A[i]=A[j];A[j]=t};
+const DONE=(A,name)=>snap(A,{f:range(0,A.length-1),t:"সম্পূর্ণ Sorted 🎉",d:name+" শেষ।"});
+
+function bubbleSteps(input){
+ const A=mk(input),n=A.length;
+ const S=[snap(A,{t:"শুরু",d:"পাশাপাশি দুইটি element compare করে বড়টা ডানে পাঠানো হবে।"})];
+ let fixed=[];
+ for(let i=0;i<n-1;i++){
+  let swapped=false;
+  for(let j=0;j<n-1-i;j++){
+   const x=A[j].v,y=A[j+1].v;
+   if(x>y){
+    swp(A,j,j+1);swapped=true;
+    S.push(snap(A,{c:[j,j+1],f:fixed.slice(),t:`Pass ${i+1}: Swap`,d:`${x} > ${y} → swap হলো: ${x} ডানে গেল, ${y} বামে এলো।`}));
+   }else S.push(snap(A,{c:[j,j+1],f:fixed.slice(),t:`Pass ${i+1}: Compare`,d:`${x} ≤ ${y} → swap দরকার নেই।`}));
+  }
+  fixed.push(n-1-i);
+  if(!swapped){fixed=range(0,n-1);break}
+ }
+ S.push(DONE(A,"Bubble Sort"));return S;
+}
+
+function selectionSteps(input){
+ const A=mk(input),n=A.length;
+ const S=[snap(A,{t:"শুরু",d:"Unsorted অংশে সবচেয়ে ছোট value খুঁজে সামনে আনা হবে।"})];
+ for(let i=0;i<n-1;i++){
+  let m=i;const fx=range(0,i-1);
+  for(let j=i+1;j<n;j++){
+   S.push(snap(A,{m,c:[j],f:fx,t:`Pass ${i+1}: Compare`,d:`${A[j].v} এবং current minimum ${A[m].v} compare হচ্ছে।`}));
+   if(A[j].v<A[m].v)m=j;
+  }
+  if(m!==i){
+   const x=A[i].v,y=A[m].v;swp(A,i,m);
+   S.push(snap(A,{c:[i,m],f:range(0,i-1),t:`Pass ${i+1}: Swap`,d:`Minimum ${y} আর ${x} swap হলো — ${y} এখন position ${i}-এ।`}));
+  }else S.push(snap(A,{f:range(0,i),t:`Pass ${i+1}: ঠিক আছে`,d:`Minimum ${A[i].v} আগে থেকেই ঠিক জায়গায় ছিল।`}));
+ }
+ S.push(DONE(A,"Selection Sort"));return S;
+}
+
+function insertionSteps(input){
+ const A=mk(input),n=A.length;
+ const S=[snap(A,{t:"শুরু",d:"একে একে key নিয়ে আগের sorted অংশে সঠিক জায়গায় বসানো হবে।"})];
+ for(let i=1;i<n;i++){
+  S.push(snap(A,{key:i,t:`Key = ${A[i].v}`,d:`${A[i].v}-কে বামের sorted অংশে সঠিক জায়গায় বসানো হবে।`}));
+  let j=i;
+  while(j>0){
+   const L=A[j-1].v,K=A[j].v;
+   if(L>K){
+    swp(A,j-1,j);
+    S.push(snap(A,{key:j-1,c:[j-1,j],t:"Swap",d:`${L} > ${K} → swap হলো: ${K} এক ঘর বামে গেল, ${L} ডানে এলো।`}));
+    j--;
+   }else{
+    S.push(snap(A,{key:j,c:[j-1,j],t:"Insert",d:`${L} ≤ ${K} → ${K} এখানেই বসবে।`}));
+    break;
+   }
+  }
+  if(j===0)S.push(snap(A,{key:0,t:"Insert",d:`${A[0].v} সবচেয়ে বামে পৌঁছেছে।`}));
+ }
+ S.push(DONE(A,"Insertion Sort"));return S;
+}
+
+function quickSteps(input){
+ const A=mk(input),n=A.length,S=[],done=new Set();
+ const F=()=>[...done];
+ function part(lo,hi){
+  const p=A[hi].v;let i=lo-1;
+  S.push(snap(A,{p:hi,f:F(),t:"Pivot নির্বাচন",d:`Pivot = ${p} (position ${lo}–${hi})। ছোটগুলো বামে, বড়গুলো ডানে যাবে।`}));
+  for(let j=lo;j<hi;j++){
+   if(A[j].v<p){
+    i++;
+    if(i!==j){
+     swp(A,i,j);
+     S.push(snap(A,{p:hi,c:[i,j],f:F(),t:"Swap",d:`${A[i].v} < ${p} → ছোট, তাই বাম দিকে swap হলো।`}));
+    }else S.push(snap(A,{p:hi,c:[j],f:F(),t:"Compare",d:`${A[j].v} < ${p} → ছোট, আগে থেকেই ঠিক জায়গায়।`}));
+   }else S.push(snap(A,{p:hi,c:[j],f:F(),t:"Compare",d:`${A[j].v} ≥ ${p} → ডান দিকেই থাকবে।`}));
+  }
+  const pos=i+1;
+  if(pos!==hi)swp(A,pos,hi);
+  done.add(pos);
+  S.push(snap(A,{p:pos,c:pos!==hi?[pos,hi]:undefined,f:F(),t:"Partition শেষ",d:`Pivot ${p} নিজের final position ${pos}-এ বসেছে।`}));
+  return pos;
+ }
+ function qs(lo,hi){
+  if(lo>hi)return;
+  if(lo===hi){done.add(lo);return}
+  const p=part(lo,hi);qs(lo,p-1);qs(p+1,hi);
+ }
+ qs(0,n-1);
+ S.push(DONE(A,"Quick Sort"));return S;
+}
+
+function heapSteps(input){
+ const A=mk(input),n=A.length;
+ const S=[snap(A,{t:"Max-Heap তৈরি",d:"আগে array-কে max-heap বানানো হবে (parent সবসময় child-এর চেয়ে বড়)।"})];
+ let size=n;
+ const tail=()=>range(size,n-1);
+ function heapify(i){
+  let largest=i;const l=2*i+1,r=2*i+2;
+  if(l<size){
+   S.push(snap(A,{c:[i,l],f:tail(),t:"Compare",d:`Parent ${A[i].v} এবং বাম child ${A[l].v} compare হচ্ছে।`}));
+   if(A[l].v>A[largest].v)largest=l;
+  }
+  if(r<size){
+   S.push(snap(A,{c:[largest,r],f:tail(),t:"Compare",d:`${A[largest].v} এবং ডান child ${A[r].v} compare হচ্ছে।`}));
+   if(A[r].v>A[largest].v)largest=r;
+  }
+  if(largest!==i){
+   const x=A[i].v,y=A[largest].v;swp(A,i,largest);
+   S.push(snap(A,{c:[i,largest],f:tail(),t:"Heap Swap",d:`${y} বড়, তাই parent ${x}-এর সাথে swap হয়ে উপরে উঠল।`}));
+   heapify(largest);
+  }
+ }
+ for(let i=Math.floor(n/2)-1;i>=0;i--)heapify(i);
+ for(let end=n-1;end>0;end--){
+  const mx=A[0].v;swp(A,0,end);size=end;
+  S.push(snap(A,{c:[0,end],f:tail(),t:"Max সরানো",d:`Max ${mx} শেষে final position ${end}-এ গেল। বাকি অংশ আবার heap করা হবে।`}));
+  heapify(0);
+ }
+ S.push(DONE(A,"Heap Sort"));return S;
+}
+
+function mergeSteps(input){
+ const A=mk(input),n=A.length;
+ const S=[snap(A,{t:"Divide & Merge",d:"Array-কে ছোট অংশে ভাগ করে sorted অবস্থায় আবার জোড়া লাগানো হবে।"})];
+ function merge(l,m,r){
+  let i=l,j=m+1;
+  while(i<=m&&j<=r){
+   const Lv=A[i].v,Rv=A[j].v;
+   if(Lv<=Rv){
+    S.push(snap(A,{ma:range(l,m),mb:range(m+1,r),c:[i,j],t:"Compare",d:`${Lv} ≤ ${Rv} → ${Lv} নিজের জায়গায় থাকবে।`}));
+    i++;
+   }else{
+    const item=A.splice(j,1)[0];A.splice(i,0,item);
+    i++;m++;j++;
+    S.push(snap(A,{ma:range(l,m),mb:range(m+1,r),c:[i-1],t:"Merge",d:`${Rv} < ${Lv} → ${Rv} বামে এসে বসল, মাঝের element গুলো এক ঘর ডানে সরল।`}));
+   }
+  }
+ }
+ function ms(l,r){if(l>=r)return;const m=Math.floor((l+r)/2);ms(l,m);ms(m+1,r);merge(l,m,r)}
+ ms(0,n-1);
+ S.push(DONE(A,"Merge Sort"));return S;
+}
+
+function countingSteps(input){
+ const A=mk(input),n=A.length;
+ const S=[snap(A,{t:"Count তৈরি",d:"প্রতিটি value কতবার আছে তা count করা হচ্ছে।"})];
+ const cnt=new Map();
+ A.forEach((e,p)=>{
+  cnt.set(e.v,(cnt.get(e.v)||0)+1);
+  S.push(snap(A,{c:[p],t:`Count[${e.v}]`,d:`Value ${e.v}-এর count এখন ${cnt.get(e.v)}।`}));
+ });
+ const keys=[...cnt.keys()].sort((a,b)=>a-b);
+ S.push(snap(A,{t:"Output তৈরি",d:"এবার ছোট value থেকে শুরু করে একে একে সামনের position-এ বসানো হবে।"}));
+ let k=0;
+ for(const v of keys)for(let c=0;c<cnt.get(v);c++){
+  const p=A.findIndex((e,q)=>q>=k&&e.v===v);
+  const item=A.splice(p,1)[0];A.splice(k,0,item);
+  S.push(snap(A,{c:[k],f:range(0,k-1),t:"Output তৈরি",d:`Value ${v} position ${k}-এ বসল।`}));
+  k++;
+ }
+ S.push(DONE(A,"Counting Sort"));return S;
+}
+
+function radixSteps(input){
+ const A=mk(input),n=A.length,max=Math.max(...input);
+ const S=[snap(A,{t:"শুরু",d:"এক digit করে (ones → tens → hundreds) stable sort করা হবে।"})];
+ for(let exp=1;Math.floor(max/exp)>0;exp*=10){
+  const name=exp===1?"Ones":exp===10?"Tens":exp===100?"Hundreds":exp+"s";
+  const dg=A.map(e=>`${e.v}→${Math.floor(e.v/exp)%10}`).join(" , ");
+  const b=Array.from({length:10},()=>[]);
+  A.forEach(e=>b[Math.floor(e.v/exp)%10].push(e));
+  A.splice(0,n,...[].concat(...b));
+  S.push(snap(A,{t:`${name} digit অনুযায়ী sort`,d:`Digit: ${dg}। এই digit অনুযায়ী সব bar নিজের জায়গায় সরে গেল।`}));
+ }
+ S.push(DONE(A,"Radix Sort"));return S;
+}
+
+function buildAlgorithms(input){
+  ALGOS["Bubble Sort"]=bubbleSteps(input);
+  ALGOS["Selection Sort"]=selectionSteps(input);
+  ALGOS["Insertion Sort"]=insertionSteps(input);
+  ALGOS["Merge Sort"]=mergeSteps(input);
+  ALGOS["Quick Sort"]=quickSteps(input);
+  ALGOS["Heap Sort"]=heapSteps(input);
+  ALGOS["Counting Sort"]=countingSteps(input);
+  ALGOS["Radix Sort"]=radixSteps(input);
+}
+
+/* ---------- ui ---------- */
+const DEFAULT_ARRAY=[7,3,8,2,6,1];
+let current="Bubble Sort",idx=0,timer=null,speed=2;
+let bars=[],idxEls=[],curOrder=[],geo={off:0,slot:49,w:42};
+buildAlgorithms(DEFAULT_ARRAY);
+
+const tabs=document.getElementById("tabs"),panel=document.getElementById("panel");
+Object.keys(ALGOS).forEach((name,i)=>{
+  const b=document.createElement("button");
+  b.className="tab"+(i===0?" active":"");b.textContent=name;b.onclick=()=>select(name);tabs.appendChild(b);
+});
+
+const interval=()=>1600/speed;
+const animDur=()=>Math.min(800,interval()*0.65);
+const xOf=p=>geo.off+p*geo.slot;
+function stop(){if(timer){clearInterval(timer);timer=null}}
+function select(name){
+  stop();current=name;idx=0;
+  document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active",x.textContent===name));
+  buildPanel();show(0,false);
+}
+
+function layout(){
+  const viz=document.getElementById("viz");if(!viz)return;
+  const n=bars.length,W=viz.clientWidth,gap=n>12?3:7;
+  const w=Math.max(10,Math.min(42,(W-10-(n-1)*gap)/n));
+  geo={w,gap,slot:w+gap,off:(W-(n*w+(n-1)*gap))/2};
+  const pm=[];curOrder.forEach((id,p)=>pm[id]=p);
+  bars.forEach((el,id)=>{
+    el.style.width=w+"px";
+    el.style.fontSize=(w<20?9:w<30?11:w<38?12:14)+"px";
+    el.style.transform=`translateX(${xOf(pm[id])}px)`;
+  });
+  idxEls.forEach((el,p)=>{el.style.left=xOf(p)+"px";el.style.width=w+"px"});
+}
+window.addEventListener("resize",layout);
+
+function buildPanel(){
+  const S=ALGOS[current],s0=S[0],n=s0.a.length,max=Math.max(...s0.a,1);
+  panel.innerHTML=`<div class="head"><div class="title" id="title"></div><div class="desc" id="desc"></div><div class="legend"><span><i class="dot"></i>Compare</span><span><i class="dot p"></i>Special / Pivot</span><span><i class="dot c"></i>Current / Key</span><span><i class="dot f"></i>Sorted</span></div></div><div class="viz" id="viz"></div><div class="indices" id="indices"></div><div class="array" id="array"></div><div class="controls"><div class="range">ধাপ <input id="range" type="range" min="0" max="${S.length-1}" value="0"><span id="counter"></span></div><div class="buttons"><button class="btn" id="prev">← আগের ধাপ</button><button class="btn primary" id="play">▶ Play</button><button class="btn" id="pause">⏸ Pause</button><button class="btn" id="next">এক ধাপ এগোন →</button><button class="btn" id="reset">↻ আবার শুরু</button><button class="btn" id="end">শেষ পর্যন্ত</button></div><div class="range speed">Speed 🐢 <input id="speed" type="range" min="1" max="5" value="${speed}"> 🐇</div></div>`;
+  const viz=document.getElementById("viz"),ind=document.getElementById("indices");
+  const val=[];s0.o.forEach((id,p)=>val[id]=s0.a[p]);
+  bars=[];idxEls=[];curOrder=s0.o.slice();
+  for(let id=0;id<n;id++){
+    const el=document.createElement("div");
+    el.className="bar";el.style.height=(val[id]/max*205+25)+"px";el.textContent=val[id];
+    viz.appendChild(el);bars[id]=el;
+  }
+  for(let p=0;p<n;p++){
+    const x=document.createElement("div");x.className="idx";x.textContent=p;ind.appendChild(x);idxEls[p]=x;
+  }
+  layout();
+  const last=S.length-1;
+  document.getElementById("range").oninput=e=>{stop();show(+e.target.value,false)};
+  document.getElementById("prev").onclick=()=>{stop();if(idx>0)show(idx-1,true)};
+  document.getElementById("next").onclick=()=>{stop();if(idx<last)show(idx+1,true)};
+  document.getElementById("reset").onclick=()=>{stop();show(0,false)};
+  document.getElementById("end").onclick=()=>{stop();show(last,false)};
+  document.getElementById("pause").onclick=stop;
+  document.getElementById("play").onclick=play;
+  document.getElementById("speed").oninput=e=>{speed=+e.target.value;if(timer){stop();play()}};
+}
+
+function play(){
+  if(timer)return;
+  const last=ALGOS[current].length-1;
+  if(idx>=last)show(0,false);
+  timer=setInterval(()=>{
+    if(idx<last)show(idx+1,true);else stop();
+  },interval());
+}
+
+function show(i,animate){
+  const S=ALGOS[current];i=Math.max(0,Math.min(S.length-1,i));
+  const s=S[i],prev=curOrder,next=s.o;
+  document.getElementById("title").textContent=s.t||current;
+  document.getElementById("desc").textContent=s.d||"";
+  document.getElementById("range").value=i;
+  document.getElementById("counter").textContent=bn(i+1)+"/"+bn(S.length);
+  document.getElementById("array").textContent="[ "+s.a.join(" , ")+" ]";
+
+  const pm=[],om=[];
+  next.forEach((id,p)=>pm[id]=p);prev.forEach((id,p)=>om[id]=p);
+  bars.forEach(el=>el.getAnimations().forEach(a=>a.cancel()));
+
+  // movement info
+  const moves=[];
+  if(animate)bars.forEach((el,id)=>{const d=pm[id]-om[id];if(d)moves.push({id,d})});
+  const maxD=moves.length?Math.max(...moves.map(m=>Math.abs(m.d))):0;
+  let lifters=moves.filter(m=>Math.abs(m.d)===maxD&&m.d>0);
+  if(!lifters.length)lifters=moves.filter(m=>Math.abs(m.d)===maxD);
+  const lift=new Set(lifters.map(m=>m.id));
+  const moved=new Set(moves.map(m=>m.id));
+
+  const has=(arr,p)=>arr&&arr.includes(p);
+  const dur=animDur();
+  bars.forEach((el,id)=>{
+    const p=pm[id];
+    let c="bar";
+    if(has(s.ma,p))c+=" mergeA";
+    if(has(s.mb,p))c+=" mergeB";
+    if(has(s.c,p))c+=" compare";
+    if(s.p===p)c+=" pivot";
+    if(s.m===p)c+=" minimum";
+    if(s.key===p)c+=" key";
+    if(has(s.f,p))c+=" fixed";
+    if(moved.has(id))c+=" swap";
+    el.className=c;
+    const x1=xOf(p);
+    el.style.transform=`translateX(${x1}px)`;
+    if(moved.has(id)){
+      const x0=xOf(om[id]),up=lift.has(id)?-32:0;
+      el.style.zIndex=lift.has(id)?3:1;
+      const a=el.animate([
+        {transform:`translateX(${x0}px) translateY(0px)`},
+        {transform:`translateX(${(x0+x1)/2}px) translateY(${up}px)`,offset:.5},
+        {transform:`translateX(${x1}px) translateY(0px)`}
+      ],{duration:dur,easing:"ease-in-out"});
+      const clr=()=>{el.style.zIndex=""};
+      a.onfinish=clr;a.oncancel=clr;
+    }else el.style.zIndex="";
+  });
+  curOrder=next.slice();idx=i;
+}
+
+function parseCustomArray(){
+  const raw=document.getElementById("customArray").value.trim();
+  const msg=document.getElementById("inputMsg");
+  if(!raw){msg.textContent="একটা array দাও। যেমন: 10, 4, 7, 2";msg.style.color="#f59e0b";return null}
+  const parts=raw.split(/[,;\s]+/).filter(Boolean);
+  if(parts.length<2||parts.length>20){msg.textContent="কমপক্ষে 2টি এবং সর্বোচ্চ 20টি value দাও।";msg.style.color="#f59e0b";return null}
+  if(parts.some(x=>!/^\d{1,3}$/.test(x))){msg.textContent="শুধু 0 থেকে 999 পর্যন্ত integer দাও। যেমন: 10, 4, 7, 2";msg.style.color="#ef4444";return null}
+  return parts.map(Number);
+}
+function applyArray(arr,text,color){
+  stop();buildAlgorithms(arr);idx=0;
+  const m=document.getElementById("inputMsg");m.textContent=text;m.style.color=color;
+  buildPanel();show(0,false);
+}
+document.getElementById("useCustom").onclick=()=>{
+  const arr=parseCustomArray();if(!arr)return;
+  applyArray(arr,"Custom array apply হয়েছে: [ "+arr.join(" , ")+" ]","#22c55e");
+};
+document.getElementById("useDefault").onclick=()=>{
+  document.getElementById("customArray").value=DEFAULT_ARRAY.join(",");
+  applyArray(DEFAULT_ARRAY,"Default array আবার চালু হয়েছে: [ "+DEFAULT_ARRAY.join(" , ")+" ]","#999");
+};
+buildPanel();show(0,false);
+</script>
+</body>
+</html>
