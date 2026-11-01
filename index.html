@@ -17,13 +17,13 @@ h1{text-align:center;font-size:24px;margin:8px 0 14px}
 .desc{color:#aaa;font-size:14px;margin-top:7px;min-height:42px}
 .legend{display:flex;justify-content:center;gap:16px;color:#aaa;font-size:12px;margin-top:9px;flex-wrap:wrap}
 .dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:#3b82f6;margin-right:4px}
-.dot.p{background:#a855f7}.dot.f{background:#777}.dot.c{background:#f59e0b}
+.dot.p{background:#a855f7}.dot.f{background:#22c55e}.dot.c{background:#f59e0b}
 .viz{height:300px;margin:34px 18px 0;position:relative;border-bottom:1px solid #555}
 .bar{position:absolute;left:0;bottom:0;width:42px;border:1px solid #555;border-bottom:0;border-radius:10px 10px 0 0;background:#2b2b2b;display:flex;justify-content:center;align-items:flex-start;padding-top:7px;font-weight:700;overflow:hidden;will-change:transform;transition:background .35s,opacity .35s}
 .bar.compare{background:#245ca8;outline:3px solid #60a5fa;outline-offset:2px;overflow:visible}
 .bar.pivot{background:#7e22ce;outline:3px solid #c084fc;outline-offset:3px;overflow:visible}
 .bar.minimum{background:#b45309;outline:3px solid #fbbf24;outline-offset:2px;overflow:visible}
-.bar.fixed{opacity:.45}
+.bar.fixed{background:#14301f;border-color:#22a35a}
 .bar.key{background:#b45309;outline:3px solid #fbbf24;outline-offset:2px;overflow:visible}
 .bar.mergeA{background:#2563eb}.bar.mergeB{background:#7c3aed}
 .bar.swap{animation:swapPulse .7s ease}
@@ -45,7 +45,8 @@ h1{text-align:center;font-size:24px;margin:8px 0 14px}
 .cl i{font-style:normal;color:#555;width:34px;text-align:right;padding-right:12px;flex:none;user-select:none}
 .cl.on{background:#1e3a5f;border-left-color:#60a5fa;color:#fff}
 .note{text-align:center;color:#888;font-size:12px;margin:13px 0}.input-card button{font-family:inherit}
-.tphase{margin:14px 18px 8px;padding:9px 12px;border-radius:12px;background:#1b2433;border:1px solid #2f4466;color:#cfe0ff;font-size:13px;line-height:1.5;text-align:center;min-height:40px;display:flex;align-items:center;justify-content:center;transition:background .3s,border-color .3s}
+.tphase{margin:14px 18px 8px;padding:9px 12px;border-radius:12px;background:#1b2433;border:1px solid #2f4466;color:#cfe0ff;font-size:13px;line-height:1.5;text-align:center;min-height:40px;transition:background .3s,border-color .3s}
+.tphase .bi{font-size:11.5px;color:#8fa3c4;margin-bottom:4px}.tphase .bs{font-size:13.5px;font-weight:600}
 .tphase.dv{background:#1b2433;border-color:#2f4466;color:#cfe0ff}
 .tphase.mg{background:#2a2040;border-color:#5b3fa0;color:#e4d9ff}
 .tphase.lf{background:#22201a;border-color:#6b5a2a;color:#f5e3b0}
@@ -56,6 +57,12 @@ h1{text-align:center;font-size:24px;margin:8px 0 14px}
 .te path{fill:none;stroke:#555;stroke-width:2;stroke-linecap:round;vector-effect:non-scaling-stroke;opacity:0;transition:opacity .35s,stroke .3s}
 .te path.on{opacity:1}
 .te path.ok{stroke:#2f8f55}
+.te path.on.off{opacity:.12}
+.hn{position:absolute;width:36px;height:36px;margin-left:-18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;background:linear-gradient(#333,#272727);border:2px solid #5a5a5a;transition:background .3s,border-color .3s,box-shadow .3s}
+.hn.hc{border-color:#fbbf24;background:#245ca8;box-shadow:0 0 12px rgba(251,191,36,.4)}
+.hn.hd{background:#14301f;border-color:#22a35a;opacity:.85}
+.hn.sw{animation:swapPulse .7s ease;z-index:2}
+.hi{position:absolute;width:14px;margin-left:-34px;margin-top:11px;text-align:right;font-size:10px;color:#777}
 .te path.hot{stroke:#fbbf24;stroke-width:3}
 .tn{position:absolute;height:38px;padding:0 2px;transition:opacity .35s,transform .35s}
 .tn.hid{opacity:0;transform:translateY(-10px)}
@@ -65,7 +72,7 @@ h1{text-align:center;font-size:24px;margin:8px 0 14px}
 .tbx.act{box-shadow:0 0 0 2px #fbbf24,0 0 14px rgba(251,191,36,.45)}
 .tc{position:relative;flex:1;min-width:0;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;border-left:1px solid rgba(255,255,255,.12)}
 .tc:first-child{border-left:0;border-radius:9px 0 0 9px}.tc:last-child{border-radius:0 9px 9px 0}.tc:only-child{border-radius:9px}
-.tc.la{background:#2563eb}.tc.ra{background:#7c3aed}.tc.cmp{box-shadow:inset 0 0 0 2px #fbbf24}
+.tc.la{background:#2563eb}.tc.ra{background:#7c3aed}.tc.pv{background:#7e22ce;box-shadow:inset 0 0 0 2px #c084fc}.tc.cmp{box-shadow:inset 0 0 0 2px #fbbf24}
 .tc.sw{border-radius:8px;animation:swapPulse .7s ease}
 @media(max-width:650px){.viz.treeviz{margin-left:7px!important;margin-right:7px!important}.tphase{margin:12px 7px 8px}}
 @media(max-width:650px){.wrap{padding:7px}.viz{height:255px;margin:34px 7px 0}.indices{margin:0 7px}.code{margin:0 7px 14px;font-size:11.5px}.lbl{margin:4px 9px 6px}.tab{padding:8px 11px}.btn{padding:9px 12px}}
@@ -173,7 +180,7 @@ function mergeSteps(input){
  // ---- Merge Sort tree: প্রতিটি mergeSort(l, r) call একটি node ----
  const N=[],ID={};
  (function gen(l,r,d,p){const id=N.length;N.push({l,r,d,p,k:r-l+1});ID[l+"-"+r]=id;if(l<r){const m=(l+r)>>1;gen(l,m,d+1,id);gen(m+1,r,d+1,id)}})(0,n-1,0,-1);
- S.tree=N;
+ S.tree=N;S.kind="merge";
  const st=N.map(()=>0),fz=N.map(()=>[]);let act=-1; // st: 0 লুকানো, 1 ভাগ হয়েছে, 2 merge চলছে, 3 merge শেষ (sorted)
  const sl=nd=>A.slice(nd.l,nd.r+1).map(e=>e.v);
  const T=(ln,d,v,x)=>T0(ln,d,v,Object.assign({tr:N.map((nd,i)=>[st[i],st[i]===3?fz[i]:st[i]?sl(nd):[]]),ta:act},x));
@@ -221,8 +228,13 @@ function mergeSteps(input){
 }
 
 function quickSteps(input){
- const [A,S,T]=trc(input),n=A.length,done=new Set(),F=()=>[...done];
- function part(lo,hi){
+ const [A,S,T0]=trc(input),n=A.length,done=new Set(),F=()=>[...done];
+ // ---- Quick Sort tree: প্রতিটি quickSort(lo, hi) call একটি node ----
+ const N=[],st=[],fz=[],pv=[];let act=-1;S.tree=N;S.kind="quick";
+ const sl=nd=>A.slice(nd.l,nd.r+1).map(e=>e.v); // st: 1 অপেক্ষায়/ভাগ হয়েছে, 2 partition চলছে, 3 শেষ (sorted)
+ const T=(ln,d,v,x)=>T0(ln,d,v,Object.assign({tr:N.map((nd,i)=>[st[i],st[i]===3?fz[i]:sl(nd),pv[i]]),ta:act},x));
+ const mk=(lo,hi,par)=>{const id=N.length;N.push({l:lo,r:hi,d:par<0?0:N[par].d+1,p:par,k:hi-lo+1});st[id]=1;fz[id]=[];pv[id]=-1;return id};
+ function part(lo,hi,id){
   const p=A[hi].v;let i=lo-1;
   T(1,`pivot p = a[hi] = ${p}, i = lo-1 = ${i}`,{lo,hi,p,i},{p:hi,f:F()});
   for(let j=lo;j<hi;j++){
@@ -232,27 +244,32 @@ function quickSteps(input){
    if(lt){i++;if(i!==j)swp(A,i,j);
     T(4,`i++ → i = ${i}; swap(a[${i}], a[${j}])`+(i===j?" (একই জায়গা, কিছু বদলায়নি)":""),{lo,hi,p,i,j},{p:hi,c:[i,j],f:F()});}
   }
-  swp(A,i+1,hi);done.add(i+1);
+  swp(A,i+1,hi);done.add(i+1);pv[id]=i+1;
   T(7,`swap(a[${i+1}], a[hi]) → pivot ${p} নিজের final জায়গা ${i+1}-এ বসল।`,{lo,hi,p,i},{p:i+1,f:F()});
   T(8,`return i + 1 = ${i+1}`,{lo,hi,p,i},{p:i+1,f:F()});
   return i+1;
  }
- function qs(lo,hi){
-  const c=lo>=hi;
+ function qs(lo,hi,par){
+  const c=lo>=hi;let id=-1;
+  if(lo<=hi){id=mk(lo,hi,par);act=id;if(c){st[id]=3;fz[id]=sl(N[id])}}else act=par;
   T(11,`lo=${lo}, hi=${hi} → lo >= hi ? ${c?"true, return":"false, এগোও"}`,{lo,hi},{f:F()});
   if(c){if(lo===hi)done.add(lo);return}
+  act=id;st[id]=2;
   T(12,`partition(a, ${lo}, ${hi}) call হচ্ছে।`,{lo,hi},{f:F()});
-  const p=part(lo,hi);
-  T(13,`বাম অংশ quickSort(a, ${lo}, ${p-1})`,{lo,hi,p},{f:F()});qs(lo,p-1);
-  T(14,`ডান অংশ quickSort(a, ${p+1}, ${hi})`,{lo,hi,p},{f:F()});qs(p+1,hi);
+  const p=part(lo,hi,id);
+  st[id]=1;
+  act=id;T(13,`বাম অংশ quickSort(a, ${lo}, ${p-1})`,{lo,hi,p},{f:F()});qs(lo,p-1,id);
+  act=id;T(14,`ডান অংশ quickSort(a, ${p+1}, ${hi})`,{lo,hi,p},{f:F()});qs(p+1,hi,id);
+  act=id;st[id]=3;fz[id]=sl(N[id]);
  }
  T(10,"quickSort(a, 0, n-1) শুরু হলো।");
- qs(0,n-1);
+ qs(0,n-1,-1);
+ act=-1;
  fin(A,T,15);return S;
 }
 
 function heapSteps(input){
- const [A,S,T]=trc(input),n=A.length;let size=n;
+ const [A,S,T]=trc(input),n=A.length;let size=n;S.kind="heap";
  const tail=()=>range(size,n-1);
  function heapify(i){
   let largest=i;const l=2*i+1,r=2*i+2,V=()=>({n:size,i,l,r,largest});
@@ -402,7 +419,9 @@ function buildPanel(){
   for(let p=0;p<n;p++){
     const x=document.createElement("div");x.className="idx";x.textContent=p;ind.appendChild(x);idxEls[p]=x;
   }
+  const ph=document.createElement("div");ph.id="tphase";ph.className="tphase";document.getElementById("viz").before(ph);
   if(TR)buildTree(TR,n);
+  else if(S.kind==="heap")buildHeap(n);
   layout();
   const cd=document.getElementById("code");
   CODE[current].forEach((t,k)=>{const d=document.createElement("div");d.className="cl";const n=document.createElement("i");n.textContent=k+1;d.appendChild(n);d.appendChild(document.createTextNode(t));cd.appendChild(d)});
@@ -417,14 +436,71 @@ function buildPanel(){
   document.getElementById("speed").oninput=e=>{speed=+e.target.value;if(timer){stop();play()}};
 }
 
+const IDEA={
+"Bubble Sort":"পাশাপাশি দুইটা তুলনা করো — বামেরটা বড় হলে swap করো। প্রতি round-এ সবচেয়ে বড়টা ডানে জমা হয়।",
+"Selection Sort":"বাকি অংশ থেকে সবচেয়ে ছোটটা খুঁজে বের করে সামনে বসাও।",
+"Insertion Sort":"তাস সাজানোর মতো — একটা একটা করে নিয়ে বামের sorted অংশে ঠিক জায়গায় বসাও।",
+"Merge Sort":"অর্ধেক অর্ধেক করে ভাগ করো, তারপর sorted অংশ দুইটা জোড়া লাগাও।",
+"Quick Sort":"একটা pivot নাও: ছোটগুলো বামে, বড়গুলো ডানে। তারপর দুই পাশে একই কাজ করো।",
+"Heap Sort":"আগে max-heap বানাও (উপরে সবচেয়ে বড়), তারপর বড়টা শেষে পাঠিয়ে বাকিটা আবার heap করো। (index i-এর child = 2i+1, 2i+2)",
+"Counting Sort":"কোন সংখ্যা কতবার আছে গুনে নাও, তারপর ছোট থেকে বড় ক্রমে বসাও।",
+"Radix Sort":"এক-এক digit ধরে (একক → দশক → শতক) stable ভাবে সাজাও।"
+};
+function genStatus(s,prev){
+  const A=s.a;
+  if(s.t&&s.t.indexOf("সম্পূর্ণ")===0)return["ok","🎉 পুরো array sorted!"];
+  if(prev){
+    const mv=[];s.o.forEach((id,p)=>{if(prev[p]!==id)mv.push(p)});
+    if(mv.length===2)return["mg",`🔁 Swap: a[${mv[0]}] ↔ a[${mv[1]}] → এখন a[${mv[0]}]=${A[mv[0]]}, a[${mv[1]}]=${A[mv[1]]}`];
+    if(mv.length>2)return["mg",`🔁 ${mv.length}টি element নতুন জায়গায় বসল`];
+  }
+  const c=s.c;
+  if(c&&c.length){
+    let t=c.length>1?`🔍 তুলনা: a[${c[0]}]=${A[c[0]]} আর a[${c[1]}]=${A[c[1]]}`:`👉 a[${c[0]}]=${A[c[0]]} দেখা হচ্ছে`;
+    if(s.p!==undefined)t+=` • pivot = ${A[s.p]}`;
+    if(s.m!==undefined)t+=` • এখনকার minimum = ${A[s.m]}`;
+    return["dv",t];
+  }
+  if(s.p!==undefined)return["lf",`📌 Pivot = ${A[s.p]}`];
+  if(s.m!==undefined)return["lf",`⭐ এখনকার minimum = ${A[s.m]}`];
+  if(s.key!==undefined)return["lf",`🔑 key = ${A[s.key]}`];
+  return null;
+}
+function mergeStatus(s){
+  const N=ALGOS[current].tree,li=s.ta;
+  if(li<0)return["ok","🎉 পুরো array sorted — root node সবুজ হয়ে গেছে"];
+  const nd=N[li],[ls,lv]=s.tr[li],R=`[${nd.l}–${nd.r}]`,vs=lv.join(", ");
+  if(nd.k===1)return["lf",`🍃 ${vs} — একটি element, আর ভাগ করা লাগবে না (নিজেই sorted)`];
+  if(ls===2)return["mg",`🔀 Merge: ${R} এর বাম ও ডান অংশ জোড়া লাগছে`];
+  return["dv",`✂️ Divide: ${R} = ${vs} কে দুই ভাগ করা হচ্ছে`];
+}
+function quickStatus(s){
+  const N=ALGOS[current].tree,li=s.ta;
+  if(li<0)return["lf","▶ quickSort শুরু হচ্ছে"];
+  const nd=N[li],[ls,lv,pvp]=s.tr[li]||[1,[],-1],R=`[${nd.l}–${nd.r}]`;
+  if(nd.k===1)return["lf",`🍃 ${lv.join(", ")} — একটি element, আর ভাগ করা লাগবে না (নিজেই sorted)`];
+  if(ls===2)return["mg",`🧭 Partition ${R}: pivot বেছে ছোটগুলো বামে, বড়গুলো ডানে সাজানো হচ্ছে`];
+  if(pvp>=0)return["dv",`✂️ pivot ${lv[pvp-nd.l]} নিজের জায়গায় বসেছে — এবার ${R} এর বাম ও ডান অংশ আলাদাভাবে sort হবে`];
+  return["dv",`📦 নতুন অংশ ${R} = ${lv.join(", ")}`];
+}
+function setBanner(s,prev){
+  const S=ALGOS[current],ph=document.getElementById("tphase");if(!ph)return;
+  let r;
+  if(S.kind==="merge")r=mergeStatus(s);
+  else if(S.kind==="quick")r=genStatus(s,prev)||quickStatus(s);
+  else r=genStatus(s,prev)||["lf","▶ "+(s.d||"")];
+  ph.className="tphase "+r[0];
+  ph.innerHTML=`<div class="bi">💡 ${IDEA[current]}</div><div class="bs">${r[1]}</div>`;
+}
+
+/* ---- Merge / Quick Sort recursion tree ---- */
 function buildTree(N,n){
-  const RH=66,NH=38,TOP=16;
+  const RH=66,NH=38,TOP=16,kind=ALGOS[current].kind;
   const viz=document.createElement("div");viz.id="tree";
-  const ph=document.createElement("div");ph.id="tphase";ph.className="tphase";
-  const anchor=document.getElementById("viz");anchor.before(ph);anchor.before(viz);
+  document.getElementById("viz").before(viz);
   const lv=Math.max(...N.map(x=>x.d))+1,H=lv*RH+TOP+8;
-  viz.className="viz treeviz";viz.style.height=H+"px";viz.style.margin="0 18px";viz.style.borderBottom="1px solid #555";
-  document.querySelector(".legend").insertAdjacentHTML("beforeend",'<span><i class="dot" style="background:#22c55e"></i>Tree-তে Merge হয়ে Sorted</span><span>⬇ ভাগ হয়</span><span>⬆ জোড়া লাগে</span>');
+  viz.className="viz treeviz";viz.style.height=(RH+TOP+8)+"px";viz.style.transition="height .35s";viz.style.margin="0 18px";viz.style.borderBottom="1px solid #555";
+  document.querySelector(".legend").insertAdjacentHTML("beforeend",kind==="merge"?'<span>⬇ ভাগ হয়</span><span>⬆ জোড়া লাগে</span>':'<span>⬇ pivot-এর বাম / ডান অংশ আলাদা হয়</span>');
   const fs=n>16?10:n>12?12:14;
   let h=`<div class="tin" style="min-width:${n*24}px;height:${H}px"><svg class="te" viewBox="0 0 100 ${H}" preserveAspectRatio="none" width="100%" height="${H}">`;
   N.forEach((nd,i)=>{if(nd.p>=0){const P=N[nd.p];
@@ -436,24 +512,19 @@ function buildTree(N,n){
 }
 function renderTree(s,prev,next){
   const N=ALGOS[current].tree,has=(a,p)=>a&&a.includes(p),li=s.ta;
-  // উপরের banner: এখন কী হচ্ছে
-  const ph=document.getElementById("tphase");
-  if(li<0){ph.textContent="🎉 পুরো array sorted — root node সবুজ হয়ে গেছে";ph.className="tphase ok"}
-  else{
-    const nd=N[li],[ls,lv]=s.tr[li],R=`[${nd.l}–${nd.r}]`,vs=lv.join(", ");
-    if(nd.k===1){ph.textContent=`🍃 ${vs} — একটি element, আর ভাগ করা লাগবে না (নিজেই sorted)`;ph.className="tphase lf"}
-    else if(ls===2){ph.textContent=`🔀 Merge: ${R} এর বাম ও ডান অংশ জোড়া লাগছে`;ph.className="tphase mg"}
-    else{ph.textContent=`✂️ Divide: ${R} = ${vs} কে দুই ভাগ করা হচ্ছে`;ph.className="tphase dv"}
-  }
+  // যতটুকু tree তৈরি হয়েছে, জায়গাও ততটুকুই নেবে
+  let md=0;N.forEach((nd,i)=>{if((s.tr[i]||[0])[0]&&nd.d>md)md=nd.d});
+  document.getElementById("tree").style.height=((md+1)*66+24)+"px";
   N.forEach((nd,i)=>{
-    const [st,vals]=s.tr[i],tn=document.getElementById("tn"+i),e=document.getElementById("te"+i),live=i===li;
+    const [st,vals,pvp]=s.tr[i]||[0,[],-1],tn=document.getElementById("tn"+i),e=document.getElementById("te"+i),live=i===li;
     tn.classList.toggle("hid",!st);
     if(e){const hot=nd.p===li||live;e.classList.toggle("on",!!st);e.classList.toggle("hot",hot);e.classList.toggle("ok",st===3&&!hot)}
     const bx=tn.firstChild;
     bx.className="tbx"+(st===3?" done":st===2?" mrg":"")+(live?" act":"");
     bx.innerHTML=vals.map((v,k)=>{
       const p=nd.l+k;let c="tc";
-      if(live){if(has(s.ma,p))c+=" la";if(has(s.mb,p))c+=" ra";if(has(s.c,p))c+=" cmp"}
+      if(live){if(has(s.ma,p))c+=" la";if(has(s.mb,p))c+=" ra";if(has(s.c,p))c+=" cmp";if(s.p===p)c+=" pv"}
+      if(pvp>=0&&p===pvp)c+=" pv";
       return `<span class="${c}">${v}</span>`}).join("");
     // swap animation: যে cell জায়গা বদলেছে সেটা পুরনো জায়গা থেকে নতুন জায়গায় যাবে
     if(prev&&live&&st===2){
@@ -472,6 +543,37 @@ function renderTree(s,prev,next){
       }
     }
   });
+}
+
+/* ---- Heap Sort: array-টাকেই binary tree হিসেবে দেখানো ---- */
+function buildHeap(n){
+  const RH=62,TOP=8,lv=Math.floor(Math.log2(n))+1,H=lv*RH+TOP+14;
+  const viz=document.createElement("div");viz.id="tree";viz.className="viz treeviz";
+  viz.style.height=H+"px";viz.style.margin="0 18px";viz.style.borderBottom="1px solid #555";
+  document.getElementById("viz").before(viz);
+  document.querySelector(".legend").insertAdjacentHTML("beforeend",'<span>🌳 উপরের tree = নিচের array (সংখ্যাটা index)</span>');
+  const dep=i=>Math.floor(Math.log2(i+1)),cx=i=>(i+1-2**dep(i)+.5)/2**dep(i)*100,cy=i=>dep(i)*RH+TOP;
+  let h=`<div class="tin" style="height:${H}px"><svg class="te" viewBox="0 0 100 ${H}" preserveAspectRatio="none" width="100%" height="${H}">`;
+  for(let i=1;i<n;i++){const p=(i-1)>>1;h+=`<path id="he${i}" class="on" d="M${cx(p)} ${cy(p)+36} L${cx(i)} ${cy(i)}"/>`}
+  h+="</svg>";
+  for(let i=0;i<n;i++)h+=`<div class="hn" id="hn${i}" style="left:${cx(i)}%;top:${cy(i)}px"></div><div class="hi" style="left:${cx(i)}%;top:${cy(i)}px">${i}</div>`;
+  viz.innerHTML=h+"</div>";
+}
+function renderHeap(s,prev,next){
+  const n=s.a.length,has=(a,p)=>a&&a.includes(p);
+  const om=[];if(prev)prev.forEach((id,p)=>om[id]=p);
+  for(let i=0;i<n;i++){
+    const el=document.getElementById("hn"+i),sorted=has(s.f,i);
+    el.className="hn"+(sorted?" hd":"")+(has(s.c,i)?" hc":"");
+    el.textContent=s.a[i];
+    if(i>0)document.getElementById("he"+i).classList.toggle("off",sorted);
+  }
+  if(prev)for(let i=0;i<n;i++){
+    const q=om[next[i]];if(q===undefined||q===i)continue;
+    const el=document.getElementById("hn"+i),a=document.getElementById("hn"+q).getBoundingClientRect(),b=el.getBoundingClientRect();
+    el.classList.add("sw");
+    el.animate([{transform:`translate(${a.left-b.left}px,${a.top-b.top}px)`},{transform:"translate(0,0)"}],{duration:animDur(),easing:"ease-in-out"});
+  }
 }
 
 function play(){
@@ -537,6 +639,8 @@ function show(i,animate){
     }else el.style.zIndex="";
   });
   if(s.tr)renderTree(s,animate?prev:null,next);
+  if(ALGOS[current].kind==="heap")renderHeap(s,animate?prev:null,next);
+  setBanner(s,animate?prev:null);
   curOrder=next.slice();idx=i;
 }
 
