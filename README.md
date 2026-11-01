@@ -41,6 +41,8 @@
 Merge Sort ট্যাবে bar chart-এর উপরে একটি **recursion tree** দেখানো হয়:
 
 - প্রতিটি `mergeSort(l, r)` call = একটি **node**, যেখানে ওই অংশের সংখ্যাগুলো থাকে।
+- **Status banner:** tree-র উপরে একটি লাইনে লেখা থাকে এখন কী হচ্ছে — ✂️ Divide, 🔀 Merge, 🍃 একটি element, নাকি 🎉 শেষ।
+- **Curve line:** parent-child সংযোগ বাঁকানো রেখায় দেখানো হয়; চলমান পথ 🟡 হলুদ, শেষ হওয়া পথ 🟢 সবুজ।
 - **Divide:** node দুই ভাগ হলে নিচে দুইটি child node আসে (🔵 বাম অংশ, 🟣 ডান অংশ)।
 - **Merge:** যে node merge হচ্ছে তার চারপাশে 🟡 হলুদ border থাকে, আর যে দুই element compare হচ্ছে সেগুলো highlight হয়।
 - **Swap:** merge-এর সময় যে element জায়গা বদলায়, tree-র ভেতরেই সেটা পুরনো ঘর থেকে নতুন ঘরে সরে যায় (একটি element উপর দিয়ে পার হয়, bar chart-এর মতো)।
