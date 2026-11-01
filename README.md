@@ -4,11 +4,14 @@
 
 **৮টি Sorting Algorithm — ধাপে ধাপে, লাইন ধরে ধরে, অ্যানিমেশনসহ**
 
-![HTML](https://img.shields.io/badge/HTML-CSS-JavaScript-orange?style=flat-square)
+[![Live Demo](https://img.shields.io/badge/▶_Live_Demo-open-3b82f6?style=flat-square)](https://sohan-parves.github.io/sorting-visualization/)
+![HTML CSS JS](https://img.shields.io/badge/HTML%20%7C%20CSS%20%7C%20JavaScript-orange?style=flat-square)
 ![No Dependencies](https://img.shields.io/badge/dependencies-none-brightgreen?style=flat-square)
 ![Algorithms](https://img.shields.io/badge/algorithms-8-blue?style=flat-square)
 
 </div>
+
+🔗 **Live:** https://sohan-parves.github.io/sorting-visualization/
 
 একটি **single-file** (`index.html`) visualizer। কোনো library, build tool বা internet লাগে না — browser-এ ফাইলটা খুললেই চলে।
 প্রতিটি ধাপে C code-এর **ঠিক কোন লাইনটা চলছে** সেটা highlight হয়, সাথে variable-এর মান (`i`, `j`, `m`...) আর বাংলায় ব্যাখ্যা দেখা যায়।
@@ -73,7 +76,7 @@ Merge Sort ট্যাবে bar chart-এর উপরে একটি **recur
 ```bash
 git clone https://github.com/sohan-parves/sorting-visualization.git
 cd sorting-visualization
-# index.html ফাইলটি browser-এ খোলো
+# index.html ফাইলটি browser-এ খোলো (double-click করলেই হবে)
 ```
 
 1. উপরের tab থেকে algorithm বেছে নাও।
@@ -97,5 +100,5 @@ sorting-visualization/
 ---
 
 <div align="center">
-শেখার জন্য বানানো ❤️ — Star দিতে ভুলো না ⭐
+শেখার জন্য বানানো ❤️ by [Sohan](https://github.com/sohan-parves) — ভালো লাগলে ⭐ দিতে ভুলো না
 </div>
