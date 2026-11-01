@@ -55,7 +55,7 @@ Merge Sort ট্যাবে bar chart-এর উপরে একটি **recur
 ## 🚀 ব্যবহার
 
 ```bash
-git clone https://github.com/<your-username>/sorting-visualization.git
+git clone https://github.com/sohan-parves/sorting-visualization.git
 cd sorting-visualization
 # index.html ফাইলটি browser-এ খোলো
 ```
