@@ -20,7 +20,8 @@
 | Feature | বিবরণ |
 |---|---|
 | 🎞️ Animated bars | Swap হলে দুইটি bar বিপরীত দিকে সরে জায়গা বদলায় |
-| 🌳 **Merge Sort Tree** | Divide ও Merge পুরো recursion-টা tree হিসেবে দেখা যায় |
+| 🌳 **Tree view** | Merge Sort, Quick Sort-এর recursion আর Heap Sort-এর heap tree আকারে দেখা যায় |
+| 💡 Status banner | প্রতিটি ধাপে সহজ ভাষায় লেখা থাকে এখন কী হচ্ছে |
 | 💻 Live code highlight | প্রতি ধাপে C code-এর চলমান লাইন নীল হয় |
 | 🔢 Variable chips | `i = 2`, `j = 5`, `pivot = 6` — প্রতি ধাপে বর্তমান মান |
 | ⏯️ Full control | Play / Pause / আগের ধাপ / পরের ধাপ / Reset / শেষ পর্যন্ত |
@@ -32,11 +33,26 @@
 
 ## 🧮 Algorithms
 
-`Bubble Sort` · `Selection Sort` · `Insertion Sort` · `Merge Sort` · `Quick Sort` · `Heap Sort` · `Counting Sort` · `Radix Sort`
+প্রতিটি tab-এ উপরে একটি **"এখন কী হচ্ছে"** banner থাকে — এক লাইনে algorithm-এর মূল ধারণা, আর নিচে বর্তমান ধাপ (🔍 তুলনা, 🔁 Swap, 📌 Pivot, 🎉 শেষ)।
+
+| Algorithm | অতিরিক্ত visualization |
+|---|---|
+| Bubble Sort | Bar animation + banner |
+| Selection Sort | Bar animation + banner (বর্তমান minimum দেখায়) |
+| Insertion Sort | Bar animation + banner (key দেখায়) |
+| **Merge Sort** | 🌳 Recursion tree (Divide → Merge) + bar |
+| **Quick Sort** | 🌳 Recursion tree (pivot-এর বাম / ডান অংশ) + bar |
+| **Heap Sort** | 🌳 Array-টা binary heap tree হিসেবে + bar |
+| Counting Sort | Bar animation + banner |
+| Radix Sort | Bar animation + banner |
+
+সবুজ মানে **sorted / নিজের চূড়ান্ত জায়গায় পৌঁছেছে**।
 
 ---
 
 ## 🌳 Merge Sort — Tree Visualization
+
+> Quick Sort-এর tree-ও একই নিয়মে চলে (node = `quickSort(lo, hi)` call, 🟣 = pivot)। Heap Sort-এ array-র index `i`-এর child থাকে `2i+1` ও `2i+2`-এ।
 
 Merge Sort ট্যাবে bar chart-এর উপরে একটি **recursion tree** দেখানো হয়:
 
