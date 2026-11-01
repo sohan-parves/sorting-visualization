@@ -45,22 +45,29 @@ h1{text-align:center;font-size:24px;margin:8px 0 14px}
 .cl i{font-style:normal;color:#555;width:34px;text-align:right;padding-right:12px;flex:none;user-select:none}
 .cl.on{background:#1e3a5f;border-left-color:#60a5fa;color:#fff}
 .note{text-align:center;color:#888;font-size:12px;margin:13px 0}.input-card button{font-family:inherit}
+.tphase{margin:14px 18px 8px;padding:9px 12px;border-radius:12px;background:#1b2433;border:1px solid #2f4466;color:#cfe0ff;font-size:13px;line-height:1.5;text-align:center;min-height:40px;display:flex;align-items:center;justify-content:center;transition:background .3s,border-color .3s}
+.tphase.dv{background:#1b2433;border-color:#2f4466;color:#cfe0ff}
+.tphase.mg{background:#2a2040;border-color:#5b3fa0;color:#e4d9ff}
+.tphase.lf{background:#22201a;border-color:#6b5a2a;color:#f5e3b0}
+.tphase.ok{background:#14301f;border-color:#22804a;color:#c6f3d6}
 .viz.treeviz{overflow-x:auto;overflow-y:hidden}
 .tin{position:relative}
-.tc.sw{background:#b45309;border-radius:6px;animation:swapPulse .7s ease}
 .te{position:absolute;left:0;top:0;pointer-events:none}
-.te line{stroke:#666;stroke-width:1.5;opacity:0;transition:opacity .35s}
-.te line.on{opacity:1}
-.tn{position:absolute;height:34px;padding:0 2px;transition:opacity .35s,transform .35s}
-.tn.hid{opacity:0;transform:translateY(-8px)}
-.tbx{display:flex;height:100%;border:1px solid #555;border-radius:8px;background:#2b2b2b;transition:background .3s,border-color .3s,box-shadow .3s}
+.te path{fill:none;stroke:#555;stroke-width:2;stroke-linecap:round;vector-effect:non-scaling-stroke;opacity:0;transition:opacity .35s,stroke .3s}
+.te path.on{opacity:1}
+.te path.ok{stroke:#2f8f55}
+.te path.hot{stroke:#fbbf24;stroke-width:3}
+.tn{position:absolute;height:38px;padding:0 2px;transition:opacity .35s,transform .35s}
+.tn.hid{opacity:0;transform:translateY(-10px)}
+.tbx{display:flex;height:100%;border:1px solid #5a5a5a;border-radius:10px;background:linear-gradient(#333,#272727);transition:background .3s,border-color .3s,box-shadow .3s}
 .tbx.mrg{border-color:#a78bfa}
-.tbx.done{border-color:#22c55e;background:#14301f}
-.tbx.act{box-shadow:0 0 0 2px #fbbf24}
-.tc{flex:1;min-width:0;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;border-left:1px solid #3a3a3a}
-.tc{position:relative}.tc:first-child{border-left:0;border-radius:7px 0 0 7px}.tc:last-child{border-radius:0 7px 7px 0}.tc:only-child{border-radius:7px}
+.tbx.done{border-color:#22a35a;background:linear-gradient(#18412a,#12301f)}
+.tbx.act{box-shadow:0 0 0 2px #fbbf24,0 0 14px rgba(251,191,36,.45)}
+.tc{position:relative;flex:1;min-width:0;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;border-left:1px solid rgba(255,255,255,.12)}
+.tc:first-child{border-left:0;border-radius:9px 0 0 9px}.tc:last-child{border-radius:0 9px 9px 0}.tc:only-child{border-radius:9px}
 .tc.la{background:#2563eb}.tc.ra{background:#7c3aed}.tc.cmp{box-shadow:inset 0 0 0 2px #fbbf24}
-@media(max-width:650px){.viz.treeviz{margin-left:7px!important;margin-right:7px!important}}
+.tc.sw{border-radius:8px;animation:swapPulse .7s ease}
+@media(max-width:650px){.viz.treeviz{margin-left:7px!important;margin-right:7px!important}.tphase{margin:12px 7px 8px}}
 @media(max-width:650px){.wrap{padding:7px}.viz{height:255px;margin:34px 7px 0}.indices{margin:0 7px}.code{margin:0 7px 14px;font-size:11.5px}.lbl{margin:4px 9px 6px}.tab{padding:8px 11px}.btn{padding:9px 12px}}
 </style>
 </head>
@@ -338,211 +345,4 @@ const CODE={
 "Insertion Sort":["void insertionSort(int a[], int n) {","  for (int i = 1; i < n; i++) {","    int j = i;                       // a[i] হলো key","    while (j > 0 && a[j-1] > a[j]) { // বামের element বড় হলে","      swap(a[j-1], a[j]);            // key বামে যাবে","      j--;","    }","  }","}"],
 "Merge Sort":["void merge(int a[], int l, int m, int r) {","  int i = l, j = m + 1;","  while (i <= m && j <= r) {","    if (a[i] <= a[j]) i++;           // বাম ছোট: থাকুক","    else {                           // ডান ছোট: বামে আনো","      for (int k = j; k > i; k--)","        swap(a[k], a[k-1]);          // এক ঘর করে বামে","      i++; m++; j++;","    }","  }","}","void mergeSort(int a[], int l, int r) {","  if (l >= r) return;","  int m = (l + r) / 2;","  mergeSort(a, l, m);","  mergeSort(a, m+1, r);","  merge(a, l, m, r);","}"],
 "Quick Sort":["int partition(int a[], int lo, int hi) {","  int p = a[hi], i = lo - 1;         // pivot = শেষ element","  for (int j = lo; j < hi; j++) {","    if (a[j] < p) {                  // pivot-এর চেয়ে ছোট?","      i++; swap(a[i], a[j]);         // বাম দিকে পাঠাও","    }","  }","  swap(a[i+1], a[hi]);               // pivot নিজের জায়গায়","  return i + 1;","}","void quickSort(int a[], int lo, int hi) {","  if (lo >= hi) return;","  int p = partition(a, lo, hi);","  quickSort(a, lo, p-1);","  quickSort(a, p+1, hi);","}"],
-"Heap Sort":["void heapify(int a[], int n, int i) {","  int largest = i, l = 2*i+1, r = 2*i+2;","  if (l < n && a[l] > a[largest]) largest = l;","  if (r < n && a[r] > a[largest]) largest = r;","  if (largest != i) {","    swap(a[i], a[largest]);          // বড় value উপরে","    heapify(a, n, largest);","  }","}","void heapSort(int a[], int n) {","  for (int i = n/2-1; i >= 0; i--) heapify(a, n, i);","  for (int end = n-1; end > 0; end--) {","    swap(a[0], a[end]);              // max শেষে যাও","    heapify(a, end, 0);","  }","}"],
-"Counting Sort":["void countingSort(int a[], int n) {","  int max = maxOf(a, n), cnt[max+1] = {0};","  for (int p = 0; p < n; p++)","    cnt[a[p]]++;                     // count গোনো","  int k = 0;","  for (int v = 0; v <= max; v++)     // count 0 হলে এখানে skip করে দেখানো হয়","    while (cnt[v]-- > 0)","      a[k++] = v;                    // ছোট থেকে বসাও","}"],
-"Radix Sort":["void radixSort(int a[], int n) {","  int max = maxOf(a, n);","  for (int exp = 1; max/exp > 0; exp *= 10)","    countingSortByDigit(a, n, exp);  // stable sort","}"]
-};
-
-/* ---------- ui ---------- */
-const DEFAULT_ARRAY=[7,3,8,2,6,1];
-let current="Bubble Sort",idx=0,timer=null,speed=2;
-let bars=[],idxEls=[],curOrder=[],geo={off:0,slot:49,w:42};
-buildAlgorithms(DEFAULT_ARRAY);
-
-const tabs=document.getElementById("tabs"),panel=document.getElementById("panel");
-Object.keys(ALGOS).forEach((name,i)=>{
-  const b=document.createElement("button");
-  b.className="tab"+(i===0?" active":"");b.textContent=name;b.onclick=()=>select(name);tabs.appendChild(b);
-});
-
-const interval=()=>1600/speed;
-const animDur=()=>Math.min(800,interval()*0.65);
-const xOf=p=>geo.off+p*geo.slot;
-function stop(){if(timer){clearInterval(timer);timer=null}}
-function select(name){
-  stop();current=name;idx=0;
-  document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active",x.textContent===name));
-  buildPanel();show(0,false);
-}
-
-function layout(){
-  const viz=document.getElementById("viz");if(!viz)return;
-  const n=bars.length,W=viz.clientWidth,gap=n>12?3:7;
-  const w=Math.max(10,Math.min(42,(W-10-(n-1)*gap)/n));
-  geo={w,gap,slot:w+gap,off:(W-(n*w+(n-1)*gap))/2};
-  const pm=[];curOrder.forEach((id,p)=>pm[id]=p);
-  bars.forEach((el,id)=>{
-    el.style.width=w+"px";
-    el.style.fontSize=(w<20?9:w<30?11:w<38?12:14)+"px";
-    el.style.transform=`translateX(${xOf(pm[id])}px)`;
-  });
-  idxEls.forEach((el,p)=>{el.style.left=xOf(p)+"px";el.style.width=w+"px"});
-}
-window.addEventListener("resize",layout);
-
-function buildPanel(){
-  const S=ALGOS[current],s0=S[0],n=s0.a.length,max=Math.max(...s0.a,1);
-  panel.innerHTML=`<div class="head"><div class="title" id="title"></div><div class="desc" id="desc"></div><div class="legend"><span><i class="dot"></i>Compare</span><span><i class="dot p"></i>Special / Pivot</span><span><i class="dot c"></i>Current / Key</span><span><i class="dot f"></i>Sorted</span></div></div><div class="viz" id="viz"></div><div class="indices" id="indices"></div><div class="array" id="array"></div><div class="chips" id="chips"></div><div class="lbl">💻 Code (C) — নীল highlight করা লাইনটাই এখন চলছে</div><div class="code" id="code"></div><div class="controls"><div class="range">ধাপ <input id="range" type="range" min="0" max="${S.length-1}" value="0"><span id="counter"></span></div><div class="buttons"><button class="btn" id="prev">← আগের ধাপ</button><button class="btn primary" id="play">▶ Play</button><button class="btn" id="pause">⏸ Pause</button><button class="btn" id="next">এক ধাপ এগোন →</button><button class="btn" id="reset">↻ আবার শুরু</button><button class="btn" id="end">শেষ পর্যন্ত</button></div><div class="range speed">Speed 🐢 <input id="speed" type="range" min="1" max="5" value="${speed}"> 🐇</div></div>`;
-  const viz=document.getElementById("viz"),ind=document.getElementById("indices");
-  const val=[];s0.o.forEach((id,p)=>val[id]=s0.a[p]);
-  bars=[];idxEls=[];curOrder=s0.o.slice();
-  const TR=S.tree;
-  for(let id=0;id<n;id++){
-    const el=document.createElement("div");
-    el.className="bar";el.style.height=(val[id]/max*205+25)+"px";el.textContent=val[id];
-    viz.appendChild(el);bars[id]=el;
-  }
-  for(let p=0;p<n;p++){
-    const x=document.createElement("div");x.className="idx";x.textContent=p;ind.appendChild(x);idxEls[p]=x;
-  }
-  if(TR)buildTree(TR,n);
-  layout();
-  const cd=document.getElementById("code");
-  CODE[current].forEach((t,k)=>{const d=document.createElement("div");d.className="cl";const n=document.createElement("i");n.textContent=k+1;d.appendChild(n);d.appendChild(document.createTextNode(t));cd.appendChild(d)});
-  const last=S.length-1;
-  document.getElementById("range").oninput=e=>{stop();show(+e.target.value,false)};
-  document.getElementById("prev").onclick=()=>{stop();if(idx>0)show(idx-1,true)};
-  document.getElementById("next").onclick=()=>{stop();if(idx<last)show(idx+1,true)};
-  document.getElementById("reset").onclick=()=>{stop();show(0,false)};
-  document.getElementById("end").onclick=()=>{stop();show(last,false)};
-  document.getElementById("pause").onclick=stop;
-  document.getElementById("play").onclick=play;
-  document.getElementById("speed").oninput=e=>{speed=+e.target.value;if(timer){stop();play()}};
-}
-
-function buildTree(N,n){
-  const viz=document.createElement("div");viz.id="tree";document.getElementById("viz").before(viz);const RH=58;
-  const lv=Math.max(...N.map(x=>x.d))+1,H=lv*RH+22;
-  viz.classList.add("treeviz");viz.style.height=H+"px";viz.style.margin="14px 18px 0";viz.style.borderBottom="1px solid #555";
-  document.querySelector(".legend").insertAdjacentHTML("beforeend",'<span><i class="dot" style="background:#22c55e"></i>Tree-তে Merge হয়ে Sorted</span>');
-  const fs=n>16?9:n>12?11:13;
-  let h=`<div class="tin" style="min-width:${n*22}px;height:${H}px"><svg class="te" width="100%" height="${H}">`;
-  N.forEach((nd,i)=>{if(nd.p>=0){const P=N[nd.p];
-    h+=`<line id="te${i}" x1="${(P.l+P.k/2)/n*100}%" y1="${P.d*RH+16+34}" x2="${(nd.l+nd.k/2)/n*100}%" y2="${nd.d*RH+16}"/>`}});
-  h+="</svg>";
-  N.forEach((nd,i)=>{h+=`<div class="tn hid" id="tn${i}" title="[${nd.l}–${nd.r}]" style="left:${nd.l/n*100}%;width:${nd.k/n*100}%;top:${nd.d*RH+16}px;font-size:${fs}px"><div class="tbx"></div></div>`});
-  viz.innerHTML=h+"</div>";
-}
-function renderTree(s,prev,next){
-  const N=ALGOS[current].tree,has=(a,p)=>a&&a.includes(p);
-  N.forEach((nd,i)=>{
-    const [st,vals]=s.tr[i],tn=document.getElementById("tn"+i),e=document.getElementById("te"+i),live=i===s.ta;
-    tn.classList.toggle("hid",!st);
-    if(e)e.classList.toggle("on",!!st);
-    const bx=tn.firstChild;
-    bx.className="tbx"+(st===3?" done":st===2?" mrg":"")+(live?" act":"");
-    bx.innerHTML=vals.map((v,k)=>{
-      const p=nd.l+k;let c="tc";
-      if(live){if(has(s.ma,p))c+=" la";if(has(s.mb,p))c+=" ra";if(has(s.c,p))c+=" cmp"}
-      return `<span class="${c}">${v}</span>`}).join("");
-    // swap animation: যে cell জায়গা বদলেছে সেটা পুরনো জায়গা থেকে নতুন জায়গায় যাবে
-    if(prev&&live&&st===2){
-      const om=[];prev.forEach((id,p)=>om[id]=p);
-      const mv=[];
-      for(let k=0;k<vals.length;k++){const p=nd.l+k,d=p-om[next[p]];if(d)mv.push({k,d})}
-      if(mv.length){
-        const md=Math.max(...mv.map(m=>Math.abs(m.d)));
-        let lf=mv.filter(m=>Math.abs(m.d)===md&&m.d>0);if(!lf.length)lf=mv.filter(m=>Math.abs(m.d)===md);
-        const L=new Set(lf.map(m=>m.k));
-        mv.forEach(m=>{
-          const el=bx.children[m.k],w=el.offsetWidth,x0=-m.d*w,up=L.has(m.k)?-14:0;
-          el.classList.add("sw");el.style.zIndex=L.has(m.k)?3:1;
-          el.animate([{transform:`translate(${x0}px,0)`},{transform:`translate(${x0/2}px,${up}px)`,offset:.5},{transform:"translate(0,0)"}],{duration:animDur(),easing:"ease-in-out"});
-        });
-      }
-    }
-  });
-}
-
-function play(){
-  if(timer)return;
-  const last=ALGOS[current].length-1;
-  if(idx>=last)show(0,false);
-  timer=setInterval(()=>{
-    if(idx<last)show(idx+1,true);else stop();
-  },interval());
-}
-
-function show(i,animate){
-  const S=ALGOS[current];i=Math.max(0,Math.min(S.length-1,i));
-  const s=S[i],prev=curOrder,next=s.o;
-  document.getElementById("title").textContent=s.t||current;
-  document.getElementById("desc").textContent=s.d||"";
-  document.getElementById("range").value=i;
-  document.getElementById("counter").textContent=bn(i+1)+"/"+bn(S.length);
-  document.getElementById("array").textContent="[ "+s.a.join(" , ")+" ]";
-  const L=s.ln||[];
-  document.querySelectorAll("#code .cl").forEach((el,k)=>el.classList.toggle("on",L.includes(k)));
-  document.getElementById("chips").innerHTML=Object.entries(s.v||{}).map(([k,x])=>`<span class="chip">${k} = ${x}</span>`).join("");
-
-  const pm=[],om=[];
-  next.forEach((id,p)=>pm[id]=p);prev.forEach((id,p)=>om[id]=p);
-  bars.forEach(el=>el.getAnimations().forEach(a=>a.cancel()));
-
-  // movement info
-  const moves=[];
-  if(animate)bars.forEach((el,id)=>{const d=pm[id]-om[id];if(d)moves.push({id,d})});
-  const maxD=moves.length?Math.max(...moves.map(m=>Math.abs(m.d))):0;
-  let lifters=moves.filter(m=>Math.abs(m.d)===maxD&&m.d>0);
-  if(!lifters.length)lifters=moves.filter(m=>Math.abs(m.d)===maxD);
-  const lift=new Set(lifters.map(m=>m.id));
-  const moved=new Set(moves.map(m=>m.id));
-
-  const has=(arr,p)=>arr&&arr.includes(p);
-  const dur=animDur();
-  bars.forEach((el,id)=>{
-    const p=pm[id];
-    let c="bar";
-    if(has(s.ma,p))c+=" mergeA";
-    if(has(s.mb,p))c+=" mergeB";
-    if(has(s.c,p))c+=" compare";
-    if(s.p===p)c+=" pivot";
-    if(s.m===p)c+=" minimum";
-    if(s.key===p)c+=" key";
-    if(has(s.f,p))c+=" fixed";
-    if(moved.has(id))c+=" swap";
-    el.className=c;
-    const x1=xOf(p);
-    el.style.transform=`translateX(${x1}px)`;
-    if(moved.has(id)){
-      const x0=xOf(om[id]),up=lift.has(id)?-32:0;
-      el.style.zIndex=lift.has(id)?3:1;
-      const a=el.animate([
-        {transform:`translateX(${x0}px) translateY(0px)`},
-        {transform:`translateX(${(x0+x1)/2}px) translateY(${up}px)`,offset:.5},
-        {transform:`translateX(${x1}px) translateY(0px)`}
-      ],{duration:dur,easing:"ease-in-out"});
-      const clr=()=>{el.style.zIndex=""};
-      a.onfinish=clr;a.oncancel=clr;
-    }else el.style.zIndex="";
-  });
-  if(s.tr)renderTree(s,animate?prev:null,next);
-  curOrder=next.slice();idx=i;
-}
-
-function parseCustomArray(){
-  const raw=document.getElementById("customArray").value.trim();
-  const msg=document.getElementById("inputMsg");
-  if(!raw){msg.textContent="একটা array দাও। যেমন: 10, 4, 7, 2";msg.style.color="#f59e0b";return null}
-  const parts=raw.split(/[,;\s]+/).filter(Boolean);
-  if(parts.length<2||parts.length>20){msg.textContent="কমপক্ষে 2টি এবং সর্বোচ্চ 20টি value দাও।";msg.style.color="#f59e0b";return null}
-  if(parts.some(x=>!/^\d{1,3}$/.test(x))){msg.textContent="শুধু 0 থেকে 999 পর্যন্ত integer দাও। যেমন: 10, 4, 7, 2";msg.style.color="#ef4444";return null}
-  return parts.map(Number);
-}
-function applyArray(arr,text,color){
-  stop();buildAlgorithms(arr);idx=0;
-  const m=document.getElementById("inputMsg");m.textContent=text;m.style.color=color;
-  buildPanel();show(0,false);
-}
-document.getElementById("useCustom").onclick=()=>{
-  const arr=parseCustomArray();if(!arr)return;
-  applyArray(arr,"Custom array apply হয়েছে: [ "+arr.join(" , ")+" ]","#22c55e");
-};
-document.getElementById("useDefault").onclick=()=>{
-  document.getElementById("customArray").value=DEFAULT_ARRAY.join(",");
-  applyArray(DEFAULT_ARRAY,"Default array আবার চালু হয়েছে: [ "+DEFAULT_ARRAY.join(" , ")+" ]","#999");
-};
-buildPanel();show(0,false);
-</script>
-</body>
-</html>
+"Heap Sort":["void heapify(int a[], int n, int i) {","  int largest = i, l = 2*i+1, r = 2*i+2;","  if (l < n && a[l] > a[largest]) largest = l;","  if (r < n && a[r] > a[largest]) largest = r;","  if (largest != i) {
