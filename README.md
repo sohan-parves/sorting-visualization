@@ -43,6 +43,7 @@ Merge Sort ট্যাবে bar chart-এর উপরে একটি **recur
 - প্রতিটি `mergeSort(l, r)` call = একটি **node**, যেখানে ওই অংশের সংখ্যাগুলো থাকে।
 - **Divide:** node দুই ভাগ হলে নিচে দুইটি child node আসে (🔵 বাম অংশ, 🟣 ডান অংশ)।
 - **Merge:** যে node merge হচ্ছে তার চারপাশে 🟡 হলুদ border থাকে, আর যে দুই element compare হচ্ছে সেগুলো highlight হয়।
+- **Swap:** merge-এর সময় যে element জায়গা বদলায়, tree-র ভেতরেই সেটা পুরনো ঘর থেকে নতুন ঘরে সরে যায় (একটি element উপর দিয়ে পার হয়, bar chart-এর মতো)।
 - **Done:** merge শেষ হলে node 🟢 সবুজ হয় (sorted)। Leaf node (একটি element) শুরু থেকেই sorted।
 - Tree আর bar chart **একসাথে, একই ধাপে** চলে।
 - ২০টি element দিলে মোবাইলে tree আড়াআড়ি scroll করা যায়।
