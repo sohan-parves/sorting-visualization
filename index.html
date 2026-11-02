@@ -62,12 +62,27 @@ h1{text-align:center;font-size:24px;margin:8px 0 14px}
 .hn.hc{border-color:#fbbf24;background:#245ca8;box-shadow:0 0 12px rgba(251,191,36,.4)}
 .hn.hd{background:#14301f;border-color:#22a35a;opacity:.85}
 .hn.sw{animation:swapPulse .7s ease;z-index:2}
-.hi{position:absolute;width:14px;margin-left:-34px;margin-top:11px;text-align:right;font-size:10px;color:#777}
+.hl{position:absolute;width:14px;margin-left:-34px;margin-top:11px;text-align:right;font-size:10px;color:#777}
 .tbd{position:absolute;left:0;right:0;border-radius:12px;pointer-events:none}
 .tbd span{position:absolute;right:10px;top:2px;font-size:9px;font-weight:700;letter-spacing:.1em;color:rgba(200,214,245,.5)}
 .bd-d{background:rgba(96,140,230,.07)}.bd-l{background:rgba(34,197,94,.06)}.bd-m{background:rgba(167,139,250,.08)}
 .rg{position:absolute;left:8px;top:-8px;z-index:2;font-size:9px;font-style:normal;line-height:14px;padding:0 5px;border-radius:7px;background:#1c1c1c;color:#8fa3c4;border:1px solid #333;pointer-events:none}
 .viz.mtree{border:1px solid #2e2e2e!important;border-radius:14px;background:rgba(255,255,255,.015)}
+.aux{margin:8px 18px 0;padding:10px 12px;background:#1a1a1a;border:1px solid #2e2e2e;border-radius:12px}
+.auxt{font-size:12px;color:#9fb0cf;margin-bottom:8px;text-align:center}
+.cts{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
+.ct{min-width:40px;text-align:center;border:1px solid #444;border-radius:8px;overflow:hidden;background:#262626;transition:border-color .3s,box-shadow .3s,opacity .3s}
+.ct b{display:block;font-size:13px;padding:3px 6px;background:#303030}
+.ct span{display:block;font-size:15px;font-weight:700;padding:3px 6px}
+.ct.hi{border-color:#fbbf24;box-shadow:0 0 10px rgba(251,191,36,.4)}
+.ct.z{opacity:.4}
+.none{color:#777;font-size:12px}
+.bks{display:grid;grid-template-columns:repeat(10,1fr);gap:4px}
+.bkt{min-height:74px;border:1px solid #3a3a3a;border-radius:8px;background:#222;display:flex;flex-direction:column;gap:3px;padding:3px 2px;transition:border-color .3s,box-shadow .3s}
+.bkt u{text-decoration:none;font-size:10px;color:#8fa3c4;text-align:center;border-bottom:1px solid #333;padding-bottom:2px}
+.bkt span{font-size:11px;font-weight:700;text-align:center;background:#2563eb;border-radius:5px;padding:2px 0}
+.bkt.hi{border-color:#fbbf24;box-shadow:0 0 8px rgba(251,191,36,.45)}
+@media(max-width:650px){.aux{margin:8px 7px 0}}
 .nt,.nt .tn,.nt .te path,.nt .tbx{transition:none!important}
 .te path.div{stroke:#6f8fd1;marker-end:url(#ahd)}
 .te path.mrg{stroke:#a28bff;marker-end:url(#ahm)}
@@ -312,48 +327,69 @@ function heapSteps(input){
 }
 
 function countingSteps(input){
- const [A,S,T]=trc(input),n=A.length,max=Math.max(...input),cnt=new Map();
+ const [A,S,T0]=trc(input),n=A.length,max=Math.max(...input),cnt=new Map(),disp=new Map();
+ S.aux="count";let cv;
+ // cn = count table-এর বর্তমান অবস্থা, cv = এই ধাপে যে value নিয়ে কাজ হচ্ছে
+ const T=(ln,d,v,x)=>T0(ln,d,v,Object.assign({cn:[...disp.entries()].sort((a,b)=>a[0]-b[0]),cv},x));
  T(0,"countingSort function শুরু হলো।");
- T(1,`max = ${max} → cnt[0..${max}] সব 0 দিয়ে শুরু।`,{max});
+ T(1,`max = ${max} → cnt[0..${max}] সব 0 দিয়ে শুরু।`,{max},{bs:["lf",`📊 count table খালি — যে সংখ্যা পাব, তার ঘরে গুনব`]});
  for(let p=0;p<n;p++){
-  T(2,`p = ${p} → a[${p}]=${A[p].v}`,{p},{c:[p]});
-  const v=A[p].v;cnt.set(v,(cnt.get(v)||0)+1);
-  T(3,`cnt[${v}]++ → cnt[${v}] = ${cnt.get(v)}`,{p,["cnt["+v+"]"]:cnt.get(v)},{c:[p]});
+  const v=A[p].v;cv=v;
+  T(2,`p = ${p} → a[${p}]=${v}`,{p},{c:[p],bs:["dv",`🔍 a[${p}] = ${v} — এটা কতবার আছে সেটা গুনছি`]});
+  cnt.set(v,(cnt.get(v)||0)+1);disp.set(v,cnt.get(v));
+  T(3,`cnt[${v}]++ → cnt[${v}] = ${cnt.get(v)}`,{p,["cnt["+v+"]"]:cnt.get(v)},{c:[p],bs:["lf",`➕ cnt[${v}] বেড়ে এখন ${cnt.get(v)}`]});
  }
- let k=0;
- T(4,"k = 0 → output-এর প্রথম position।",{k});
+ let k=0;cv=undefined;
+ T(4,"k = 0 → output-এর প্রথম position।",{k},{bs:["lf","✅ গোনা শেষ। এবার ছোট থেকে বড় ক্রমে count অনুযায়ী বসাব"]});
  const keys=[...cnt.keys()].sort((a,b)=>a-b);
  for(const v of keys){
-  T(5,`v = ${v} → cnt[${v}] = ${cnt.get(v)}`+(v===keys[0]?" (যেসব v-র count 0 সেগুলো এখানে বাদ দিয়ে দেখানো হচ্ছে)":""),{v,k},{f:range(0,k-1)});
+  cv=v;
+  T(5,`v = ${v} → cnt[${v}] = ${cnt.get(v)}`+(v===keys[0]?" (যেসব v-র count 0 সেগুলো এখানে বাদ দিয়ে দেখানো হচ্ছে)":""),{v,k},{f:range(0,k-1),bs:["dv",`🔁 v = ${v} — এটা ${cnt.get(v)}বার বসবে`]});
   let left=cnt.get(v);
   while(true){
-   T(6,`cnt[v] > 0 ? → ${left>0?"true":"false, পরের v-তে যাও"}`,{v,k,"cnt[v]":left},{c:left>0&&k<n?[k]:undefined,f:range(0,k-1)});
+   T(6,`cnt[v] > 0 ? → ${left>0?"true":"false, পরের v-তে যাও"}`,{v,k,"cnt[v]":left},{c:left>0&&k<n?[k]:undefined,f:range(0,k-1),bs:left>0?["dv",`cnt[${v}] = ${left} > 0 — আরেকবার বসাতে হবে`]:["lf",`cnt[${v}] = 0 — ${v} শেষ, পরের সংখ্যায় যাই`]});
    if(left<=0)break;
-   left--;
+   left--;disp.set(v,left);
    const q=A.findIndex((e,x)=>x>=k&&e.v===v),it=A.splice(q,1)[0];A.splice(k,0,it);
-   T(7,`a[k++] = v → a[${k}] = ${v}`,{v,k,"cnt[v]":left},{c:[k],f:range(0,k-1)});
+   T(7,`a[k++] = v → a[${k}] = ${v}`,{v,k,"cnt[v]":left},{c:[k],f:range(0,k-1),bs:["mg",`📥 a[${k}] = ${v} বসল — cnt[${v}] কমে ${left}`]});
    k++;
   }
  }
+ cv=undefined;
  fin(A,T,8);return S;
 }
 
 function radixSteps(input){
  const [A,S,T]=trc(input),n=A.length,max=Math.max(...input);
- T(0,"radixSort function শুরু হলো।");
- T(1,`max = ${max} → সবচেয়ে বড় সংখ্যায় যত digit, তত pass।`,{max});
+ S.aux="radix";
+ let bk=null;
+ const B=()=>bk?bk.map(b=>b.map(e=>e.v)):null;
+ T(9,"radixSort function শুরু হলো।");
+ T(10,`max = ${max} → সবচেয়ে বড় সংখ্যায় যত digit, তত pass।`,{max},{bs:["lf",`🔢 সবচেয়ে বড় সংখ্যা ${max} — তাই ${String(max).length}টি pass (একক → দশক → শতক…)`]});
  for(let exp=1;;exp*=10){
   const q=Math.floor(max/exp),ok=q>0;
-  T(2,`exp = ${exp} → max/exp = ${q} > 0 ? → ${ok?"true":"false, loop শেষ"}`,{exp,max});
+  T(11,`exp = ${exp} → max/exp = ${q} > 0 ? → ${ok?"true":"false, loop শেষ"}`,{exp,max},{bn:undefined});
   if(!ok)break;
-  const name=exp===1?"Ones":exp===10?"Tens":exp===100?"Hundreds":exp+"s";
-  const dg=A.map(e=>`${e.v}→${Math.floor(e.v/exp)%10}`).join(" , ");
-  const b=Array.from({length:10},()=>[]);
-  A.forEach(e=>b[Math.floor(e.v/exp)%10].push(e));
-  A.splice(0,n,...[].concat(...b));
-  T(3,`countingSortByDigit(a, n, ${exp}) → ${name} digit: ${dg}। stable sort হয়ে সব bar নিজের জায়গায় গেল।`,{exp});
+  const name=exp===1?"একক (Ones)":exp===10?"দশক (Tens)":exp===100?"শতক (Hundreds)":exp+"-এর ঘর";
+  bk=Array.from({length:10},()=>[]);
+  T(12,`countingSortByDigit(a, n, ${exp}) → এবার ${name} digit ধরে সাজানো হবে।`,{exp},{bk:B(),bn:name,bs:["lf",`🪣 ${name} digit ধরে সাজানো শুরু — ০ থেকে ৯ নম্বর bucket তৈরি`]});
+  const order=A.slice();
+  order.forEach((e,p)=>{
+   const d=Math.floor(e.v/exp)%10;bk[d].push(e);
+   T(3,`a[${p}]=${e.v} → ${name} digit = ${d} → bucket ${d}-এ রাখো`,{i:p,digit:d},{c:[p],bk:B(),bd:d,bn:name,bs:["dv",`📥 ${e.v}-এর ${name} digit = ${d} → bucket ${d}-এ গেল`]});
+  });
+  const col=[];
+  for(let d=0;d<10;d++){
+   if(!bk[d].length)continue;
+   const k0=col.length;col.push(...bk[d]);
+   const got=bk[d].map(e=>e.v);bk[d]=[];
+   const rest=order.filter(e=>!col.includes(e));
+   A.splice(0,n,...col,...rest);
+   T(7,`bucket ${d} → [${got.join(", ")}] আগের ক্রমে (stable) array-তে ফেরত এলো।`,{d,k:col.length},{c:range(k0,col.length-1),bk:B(),bd:d,bn:name,bs:["mg",`📤 bucket ${d} থেকে ${got.join(", ")} array-তে বসল`]});
+  }
  }
- fin(A,T,4);return S;
+ bk=null;
+ fin(A,T,13);return S;
 }
 
 function buildAlgorithms(input){
@@ -375,7 +411,7 @@ const CODE={
 "Quick Sort":["int partition(int a[], int lo, int hi) {","  int p = a[hi], i = lo - 1;         // pivot = শেষ element","  for (int j = lo; j < hi; j++) {","    if (a[j] < p) {                  // pivot-এর চেয়ে ছোট?","      i++; swap(a[i], a[j]);         // বাম দিকে পাঠাও","    }","  }","  swap(a[i+1], a[hi]);               // pivot নিজের জায়গায়","  return i + 1;","}","void quickSort(int a[], int lo, int hi) {","  if (lo >= hi) return;","  int p = partition(a, lo, hi);","  quickSort(a, lo, p-1);","  quickSort(a, p+1, hi);","}"],
 "Heap Sort":["void heapify(int a[], int n, int i) {","  int largest = i, l = 2*i+1, r = 2*i+2;","  if (l < n && a[l] > a[largest]) largest = l;","  if (r < n && a[r] > a[largest]) largest = r;","  if (largest != i) {","    swap(a[i], a[largest]);          // বড় value উপরে","    heapify(a, n, largest);","  }","}","void heapSort(int a[], int n) {","  for (int i = n/2-1; i >= 0; i--) heapify(a, n, i);","  for (int end = n-1; end > 0; end--) {","    swap(a[0], a[end]);              // max শেষে যাও","    heapify(a, end, 0);","  }","}"],
 "Counting Sort":["void countingSort(int a[], int n) {","  int max = maxOf(a, n), cnt[max+1] = {0};","  for (int p = 0; p < n; p++)","    cnt[a[p]]++;                     // count গোনো","  int k = 0;","  for (int v = 0; v <= max; v++)     // count 0 হলে এখানে skip করে দেখানো হয়","    while (cnt[v]-- > 0)","      a[k++] = v;                    // ছোট থেকে বসাও","}"],
-"Radix Sort":["void radixSort(int a[], int n) {","  int max = maxOf(a, n);","  for (int exp = 1; max/exp > 0; exp *= 10)","    countingSortByDigit(a, n, exp);  // stable sort","}"]
+"Radix Sort":["void countingSortByDigit(int a[], int n, int exp) {","  // প্রতিটি element-এর digit দেখে সেই bucket-এ রাখো","  for (int i = 0; i < n; i++)","    bucket[(a[i] / exp) % 10].push(a[i]);","  // bucket 0 থেকে 9 পর্যন্ত আগের ক্রমে ফেরত আনো","  int k = 0;","  for (int d = 0; d < 10; d++)","    for (int x : bucket[d]) a[k++] = x;","}","void radixSort(int a[], int n) {","  int max = maxOf(a, n);","  for (int exp = 1; max/exp > 0; exp *= 10)","    countingSortByDigit(a, n, exp);  // stable sort","}"]
 };
 
 /* ---------- ui ---------- */
@@ -433,6 +469,7 @@ function buildPanel(){
   const ph=document.createElement("div");ph.id="tphase";ph.className="tphase";document.getElementById("viz").before(ph);
   if(TR)(S.kind==="merge"?buildMergeTree(TR,n,true):buildTree(TR,n));
   else if(S.kind==="heap")buildHeap(n);
+  if(S.aux){const a=document.createElement("div");a.id="aux";a.className="aux";document.getElementById("array").after(a)}
   layout();
   const cd=document.getElementById("code");
   CODE[current].forEach((t,k)=>{const d=document.createElement("div");d.className="cl";const n=document.createElement("i");n.textContent=k+1;d.appendChild(n);d.appendChild(document.createTextNode(t));cd.appendChild(d)});
@@ -494,12 +531,25 @@ function quickStatus(s){
   if(pvp>=0)return["dv",`✂️ pivot ${lv[pvp-nd.l]} নিজের জায়গায় বসেছে — এবার ${R} এর বাম ও ডান অংশ আলাদাভাবে sort হবে`];
   return["dv",`📦 নতুন অংশ ${R} = ${lv.join(", ")}`];
 }
+function renderAux(s){
+  const S=ALGOS[current],el=document.getElementById("aux");if(!el)return;
+  if(S.aux==="count"){
+    const cn=s.cn||[];
+    el.innerHTML='<div class="auxt">📊 Count table — cnt[v] (কোন সংখ্যা কতবার আছে)</div><div class="cts">'+
+      (cn.length?cn.map(([v,c])=>`<div class="ct${v===s.cv?" hi":""}${c===0?" z":""}"><b>${v}</b><span>${c}</span></div>`).join(""):'<i class="none">এখনো কিছু গোনা হয়নি</i>')+"</div>";
+  }else if(S.aux==="radix"){
+    const bk=s.bk||Array.from({length:10},()=>[]);
+    el.innerHTML=`<div class="auxt">🪣 Digit bucket${s.bn?" — এখন "+s.bn+" digit":""}</div><div class="bks">`+
+      bk.map((b,d)=>`<div class="bkt${d===s.bd?" hi":""}"><u>${d}</u>${b.map(v=>`<span>${v}</span>`).join("")}</div>`).join("")+"</div>";
+  }
+}
 function setBanner(s,prev){
   const S=ALGOS[current],ph=document.getElementById("tphase");if(!ph)return;
   let r;
   if(S.kind==="merge")r=mergeStatus(s);
   else if(S.kind==="quick")r=genStatus(s,prev)||quickStatus(s);
   else r=genStatus(s,prev)||["lf","▶ "+(s.d||"")];
+  if(s.bs)r=s.bs;
   ph.className="tphase "+r[0];
   ph.innerHTML=`<div class="bi">💡 ${IDEA[current]}</div><div class="bs">${r[1]}</div>`;
 }
@@ -654,7 +704,7 @@ function buildHeap(n){
   let h=`<div class="tin" style="height:${H}px"><svg class="te" viewBox="0 0 100 ${H}" preserveAspectRatio="none" width="100%" height="${H}">`;
   for(let i=1;i<n;i++){const p=(i-1)>>1;h+=`<path id="he${i}" class="on" d="M${cx(p)} ${cy(p)+36} L${cx(i)} ${cy(i)}"/>`}
   h+="</svg>";
-  for(let i=0;i<n;i++)h+=`<div class="hn" id="hn${i}" style="left:${cx(i)}%;top:${cy(i)}px"></div><div class="hi" style="left:${cx(i)}%;top:${cy(i)}px">${i}</div>`;
+  for(let i=0;i<n;i++)h+=`<div class="hn" id="hn${i}" style="left:${cx(i)}%;top:${cy(i)}px"></div><div class="hl" style="left:${cx(i)}%;top:${cy(i)}px">${i}</div>`;
   viz.innerHTML=h+"</div>";
 }
 function renderHeap(s,prev,next){
@@ -739,6 +789,7 @@ function show(i,animate){
   if(s.tr)(ALGOS[current].kind==="merge"?renderMergeTree:renderTree)(s,animate?prev:null,next);
   if(ALGOS[current].kind==="heap")renderHeap(s,animate?prev:null,next);
   setBanner(s,animate?prev:null);
+  renderAux(s);
   curOrder=next.slice();idx=i;
 }
 
