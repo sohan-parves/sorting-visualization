@@ -43,7 +43,7 @@
 | Bubble Sort | Bar animation + banner |
 | Selection Sort | Bar animation + banner (বর্তমান minimum দেখায়) |
 | Insertion Sort | Bar animation + banner (key দেখায়) |
-| **Merge Sort** | 🌳 Recursion tree (Divide → Merge) + bar |
+| **Merge Sort** | 🌳 Diamond tree (Divide ⬇ → Merge ⬆, arrow সহ) + bar |
 | **Quick Sort** | 🌳 Recursion tree (pivot-এর বাম / ডান অংশ) + bar |
 | **Heap Sort** | 🌳 Array-টা binary heap tree হিসেবে + bar |
 | Counting Sort | Bar animation + banner |
@@ -55,19 +55,29 @@
 
 ## 🌳 Merge Sort — Tree Visualization
 
+Merge Sort ট্যাবে পাঠ্যবইয়ের মতো **"diamond" tree** দেখানো হয় — উপরে ⬇ **Divide**, নিচে ⬆ **Merge**, মাঝখানে একেবারে ছোট অংশ (একটি element):
+
+```
+ [38 27 43 3 9 82 10]          ← পুরো array
+   ⬇ ভাগ হয়
+ [38 27 43 3]   [9 82 10]
+   ...
+ [38] [27] [43] [3] [9] [82] [10]   ← একটি element করে
+   ⬆ জোড়া লাগে (sorted হয়ে)
+   ...
+ [3 9 10 27 38 43 82]          ← sorted
+```
+
+- **Rong-er band:** পেছনে হালকা রঙে তিনটি অংশ — 🔵 DIVIDE, 🟢 LEAF, 🟣 MERGE। প্রতিটি node-এর কোণায় ছোট label-এ index range (যেমন `0–3`) লেখা থাকে (১২টি পর্যন্ত element-এ)।
+- **Arrow** দিয়ে দেখানো হয় কোন অংশ থেকে কোন অংশ তৈরি হলো (নীলচে = ভাগ, বেগুনি = জোড়া)।
+- **Divide:** `mergeSort(l, r)` call হলে node তৈরি হয়; 🔵 বাম অংশ, 🟣 ডান অংশ।
+- **Merge:** নিচের সারিতে 🟡 হলুদ border-এর node-এ merge চলে — যে দুই element compare হচ্ছে সেগুলো highlight হয়।
+- **Swap:** merge-এর সময় element জায়গা বদলালে cell-গুলো animation করে সরে যায় (একটি উপর দিয়ে পার হয়)।
+- **Done:** merge শেষ হলে node 🟢 সবুজ হয়ে যায়।
+- **Status banner:** উপরে লেখা থাকে এখন কী হচ্ছে — ✂️ Divide, 🔀 Merge, 🍃 একটি element, 🎉 শেষ।
+- Tree আর bar chart **একসাথে, একই ধাপে** চলে। ২০টি element দিলে মোবাইলে tree আড়াআড়ি scroll করা যায়।
+
 > Quick Sort-এর tree-ও একই নিয়মে চলে (node = `quickSort(lo, hi)` call, 🟣 = pivot)। Heap Sort-এ array-র index `i`-এর child থাকে `2i+1` ও `2i+2`-এ।
-
-Merge Sort ট্যাবে bar chart-এর উপরে একটি **recursion tree** দেখানো হয়:
-
-- প্রতিটি `mergeSort(l, r)` call = একটি **node**, যেখানে ওই অংশের সংখ্যাগুলো থাকে।
-- **Status banner:** tree-র উপরে একটি লাইনে লেখা থাকে এখন কী হচ্ছে — ✂️ Divide, 🔀 Merge, 🍃 একটি element, নাকি 🎉 শেষ।
-- **Curve line:** parent-child সংযোগ বাঁকানো রেখায় দেখানো হয়; চলমান পথ 🟡 হলুদ, শেষ হওয়া পথ 🟢 সবুজ।
-- **Divide:** node দুই ভাগ হলে নিচে দুইটি child node আসে (🔵 বাম অংশ, 🟣 ডান অংশ)।
-- **Merge:** যে node merge হচ্ছে তার চারপাশে 🟡 হলুদ border থাকে, আর যে দুই element compare হচ্ছে সেগুলো highlight হয়।
-- **Swap:** merge-এর সময় যে element জায়গা বদলায়, tree-র ভেতরেই সেটা পুরনো ঘর থেকে নতুন ঘরে সরে যায় (একটি element উপর দিয়ে পার হয়, bar chart-এর মতো)।
-- **Done:** merge শেষ হলে node 🟢 সবুজ হয় (sorted)। Leaf node (একটি element) শুরু থেকেই sorted।
-- Tree আর bar chart **একসাথে, একই ধাপে** চলে।
-- ২০টি element দিলে মোবাইলে tree আড়াআড়ি scroll করা যায়।
 
 ---
 
