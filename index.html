@@ -54,7 +54,7 @@ h1{text-align:center;font-size:24px;margin:8px 0 14px}
 .viz.treeviz{overflow-x:auto;overflow-y:hidden}
 .tin{position:relative}
 .te{position:absolute;left:0;top:0;pointer-events:none}
-.te path{fill:none;stroke:#555;stroke-width:2;stroke-linecap:round;vector-effect:non-scaling-stroke;opacity:0;transition:opacity .35s,stroke .3s}
+.te path{fill:none;stroke:#555;stroke-width:2.2;stroke-linecap:round;vector-effect:non-scaling-stroke;opacity:0;transition:opacity .35s,stroke .3s}
 .te path.on{opacity:1}
 .te path.ok{stroke:#2f8f55}
 .te path.on.off{opacity:.12}
@@ -63,13 +63,24 @@ h1{text-align:center;font-size:24px;margin:8px 0 14px}
 .hn.hd{background:#14301f;border-color:#22a35a;opacity:.85}
 .hn.sw{animation:swapPulse .7s ease;z-index:2}
 .hi{position:absolute;width:14px;margin-left:-34px;margin-top:11px;text-align:right;font-size:10px;color:#777}
-.te path.hot{stroke:#fbbf24;stroke-width:3}
-.tn{position:absolute;height:38px;padding:0 2px;transition:opacity .35s,transform .35s}
-.tn.hid{opacity:0;transform:translateY(-10px)}
-.tbx{display:flex;height:100%;border:1px solid #5a5a5a;border-radius:10px;background:linear-gradient(#333,#272727);transition:background .3s,border-color .3s,box-shadow .3s}
-.tbx.mrg{border-color:#a78bfa}
+.tbd{position:absolute;left:0;right:0;border-radius:12px;pointer-events:none}
+.tbd span{position:absolute;right:10px;top:2px;font-size:9px;font-weight:700;letter-spacing:.1em;color:rgba(200,214,245,.5)}
+.bd-d{background:rgba(96,140,230,.07)}.bd-l{background:rgba(34,197,94,.06)}.bd-m{background:rgba(167,139,250,.08)}
+.rg{position:absolute;left:8px;top:-8px;z-index:2;font-size:9px;font-style:normal;line-height:14px;padding:0 5px;border-radius:7px;background:#1c1c1c;color:#8fa3c4;border:1px solid #333;pointer-events:none}
+.viz.mtree{border:1px solid #2e2e2e!important;border-radius:14px;background:rgba(255,255,255,.015)}
+.nt,.nt .tn,.nt .te path,.nt .tbx{transition:none!important}
+.te path.div{stroke:#6f8fd1;marker-end:url(#ahd)}
+.te path.mrg{stroke:#a28bff;marker-end:url(#ahm)}
+.te path.div.hot,.te path.mrg.hot{stroke:#fbbf24;marker-end:url(#ahh)}
+.te path.hot{stroke:#fbbf24;stroke-width:3;filter:drop-shadow(0 0 3px rgba(251,191,36,.8))}
+.tn{position:absolute;height:38px;padding:0 2px;transition:opacity .35s,transform .45s cubic-bezier(.2,1.3,.4,1)}
+.tn.hid{opacity:0;transform:translateY(-10px) scale(.92)}
+.tbx{display:flex;height:100%;border:1px solid #5a5a5a;border-radius:11px;background:linear-gradient(#333,#272727);box-shadow:0 3px 8px rgba(0,0,0,.35);transition:background .3s,border-color .3s,box-shadow .3s}
+.tbx.dv{background:linear-gradient(#2a3550,#222b42);border-color:#3f5a8f}
+.tbx.mrg{border-color:#a78bfa;background:linear-gradient(#37294f,#2a2040)}
 .tbx.done{border-color:#22a35a;background:linear-gradient(#18412a,#12301f)}
-.tbx.act{box-shadow:0 0 0 2px #fbbf24,0 0 14px rgba(251,191,36,.45)}
+.tbx.act{box-shadow:0 0 0 2px #fbbf24,0 0 14px rgba(251,191,36,.45);animation:tglow 1.4s ease-in-out infinite}
+@keyframes tglow{0%,100%{box-shadow:0 0 0 2px #fbbf24,0 0 10px rgba(251,191,36,.3)}50%{box-shadow:0 0 0 2px #fbbf24,0 0 20px rgba(251,191,36,.65)}}
 .tc{position:relative;flex:1;min-width:0;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;border-left:1px solid rgba(255,255,255,.12)}
 .tc:first-child{border-left:0;border-radius:9px 0 0 9px}.tc:last-child{border-radius:0 9px 9px 0}.tc:only-child{border-radius:9px}
 .tc.la{background:#2563eb}.tc.ra{background:#7c3aed}.tc.pv{background:#7e22ce;box-shadow:inset 0 0 0 2px #c084fc}.tc.cmp{box-shadow:inset 0 0 0 2px #fbbf24}
@@ -180,7 +191,7 @@ function mergeSteps(input){
  // ---- Merge Sort tree: প্রতিটি mergeSort(l, r) call একটি node ----
  const N=[],ID={};
  (function gen(l,r,d,p){const id=N.length;N.push({l,r,d,p,k:r-l+1});ID[l+"-"+r]=id;if(l<r){const m=(l+r)>>1;gen(l,m,d+1,id);gen(m+1,r,d+1,id)}})(0,n-1,0,-1);
- S.tree=N;S.kind="merge";
+ S.tree=N;S.kind="merge";S.orig=A.map(e=>e.v);
  const st=N.map(()=>0),fz=N.map(()=>[]);let act=-1; // st: 0 লুকানো, 1 ভাগ হয়েছে, 2 merge চলছে, 3 merge শেষ (sorted)
  const sl=nd=>A.slice(nd.l,nd.r+1).map(e=>e.v);
  const T=(ln,d,v,x)=>T0(ln,d,v,Object.assign({tr:N.map((nd,i)=>[st[i],st[i]===3?fz[i]:st[i]?sl(nd):[]]),ta:act},x));
@@ -420,7 +431,7 @@ function buildPanel(){
     const x=document.createElement("div");x.className="idx";x.textContent=p;ind.appendChild(x);idxEls[p]=x;
   }
   const ph=document.createElement("div");ph.id="tphase";ph.className="tphase";document.getElementById("viz").before(ph);
-  if(TR)buildTree(TR,n);
+  if(TR)(S.kind==="merge"?buildMergeTree(TR,n,true):buildTree(TR,n));
   else if(S.kind==="heap")buildHeap(n);
   layout();
   const cd=document.getElementById("code");
@@ -545,6 +556,93 @@ function renderTree(s,prev,next){
   });
 }
 
+/* ---- Merge Sort: ⬇ Divide তারপর ⬆ Merge (diamond tree, arrow সহ) ---- */
+function buildMergeTree(N,n,legend){
+  const S=ALGOS[current],RH=62,NH=38,TOP=22;
+  const D=Math.max(...N.map(x=>x.d));
+  const viz=document.createElement("div");viz.id="tree";viz.className="viz treeviz mtree";
+  viz.style.margin="0 18px";viz.style.transition="height .35s";
+  document.getElementById("viz").before(viz);
+  const W=Math.max(viz.clientWidth,n*24),H=(2*D+1)*RH+TOP+12;
+  viz.style.height=(TOP+NH+14)+"px";
+  if(legend)document.querySelector(".legend").insertAdjacentHTML("beforeend",'<span>⬇ ভাগ হয়</span><span>⬆ জোড়া লাগে</span>');
+  // প্রতিটি node-এর কপি: divide-এর সময় row = depth, merge-এর সময় row = 2D - depth
+  const items=[],ix={},add=(i,row,kind)=>{ix[i+":"+row]=items.length;items.push({i,row,kind})};
+  N.forEach((nd,i)=>{
+    if(nd.k>1){add(i,nd.d,"d");add(i,2*D-nd.d,"m")}
+    else{for(let r=nd.d;r<=D;r++)add(i,r,"L");for(let r=D+1;r<=2*D-nd.d;r++)add(i,r,"Lm")}
+  });
+  const edges=[],ch=N.map(()=>[]);N.forEach((nd,i)=>{if(nd.p>=0)ch[nd.p].push(i)});
+  const E=(a,b,kind)=>edges.push({a:ix[a],b:ix[b],kind});
+  N.forEach((nd,i)=>{
+    if(nd.k>1)ch[i].forEach(c=>{E(i+":"+nd.d,c+":"+(nd.d+1),"div");E(c+":"+(2*D-nd.d-1),i+":"+(2*D-nd.d),"mrg")});
+    else for(let r=nd.d;r<2*D-nd.d;r++)E(i+":"+r,i+":"+(r+1),r<D?"div":"mrg");
+  });
+  const fs=n>16?10:n>12?12:14,X=nd=>(nd.l+nd.k/2)/n*W;
+  const band=(r0,r1,cls,label)=>`<div class="tbd ${cls}" style="top:${r0*RH+TOP-14}px;height:${(r1-r0)*RH+NH+22}px"><span>${label}</span></div>`;
+  const bands=band(0,D-1,"bd-d","⬇ DIVIDE")+band(D,D,"bd-l","LEAF")+band(D+1,2*D,"bd-m","⬆ MERGE");
+  let h=`<div class="tin" style="width:${W}px;height:${H}px">`+bands+`<svg class="te" width="${W}" height="${H}"><defs>`+
+    [["ahd","#6f8fd1"],["ahm","#a28bff"],["ahh","#fbbf24"]].map(([id,c])=>`<marker id="${id}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" markerUnits="userSpaceOnUse" orient="auto"><polygon points="0,0 10,5 0,10" fill="${c}"/></marker>`).join("")+"</defs>";
+  edges.forEach((e,k)=>{
+    const A=items[e.a],B=items[e.b],x1=X(N[A.i]),x2=X(N[B.i]),y1=A.row*RH+TOP+NH,y2=B.row*RH+TOP,ym=(y1+y2)/2;
+    h+=`<path id="me${k}" class="${e.kind}" d="M${x1} ${y1} C${x1} ${ym} ${x2} ${ym} ${x2} ${y2}"/>`});
+  h+="</svg>";
+  items.forEach((it,k)=>{const nd=N[it.i];
+    h+=`<div class="tn hid" id="mi${k}" title="[${nd.l}–${nd.r}]" style="left:${nd.l/n*100}%;width:${nd.k/n*100}%;top:${it.row*RH+TOP}px;font-size:${fs}px"><div class="tbx"></div>${n<=12&&(it.kind==="d"||it.kind==="m"||(it.kind==="L"&&it.row===nd.d))?`<i class="rg">${nd.k>1?nd.l+"–"+nd.r:nd.l}</i>`:""}</div>`});
+  viz.innerHTML=h+"</div>";
+  S.mt={items,edges,D,RH,TOP,W};
+}
+function renderMergeTree(s,prev,next){
+  const S=ALGOS[current],N=S.tree,{items,edges,D,RH,TOP}=S.mt,orig=S.orig,li=s.ta,has=(a,p)=>a&&a.includes(p);
+  const vis=[],act=[],NHt=38;let maxRow=0;
+  items.forEach((it,k)=>{
+    const nd=N[it.i],[st,vals]=s.tr[it.i],live=it.i===li;
+    let v=false,vv,cls="tbx";
+    if(it.kind==="d"){v=st>=1;vv=orig.slice(nd.l,nd.r+1);act[k]=live&&st===1;cls+=" dv"}
+    else if(it.kind==="L"){v=st>=1;vv=[orig[nd.l]];act[k]=live&&it.row===nd.d;cls+=it.row===D?" done":" dv"}
+    else if(it.kind==="m"){v=st>=2;vv=vals;act[k]=live&&st===2;cls+=st===3?" done":" mrg"}
+    else{v=s.tr[nd.p][0]>=2;vv=[orig[nd.l]];act[k]=false;cls+=" done"}
+    vis[k]=v;
+    const tn=document.getElementById("mi"+k);tn.classList.toggle("hid",!v);
+    if(!v)return;
+    if(it.row>maxRow)maxRow=it.row;
+    const bx=tn.firstChild;bx.className=cls+(act[k]?" act":"");
+    bx.innerHTML=vv.map((x,j)=>{
+      const p=nd.l+j;let c="tc";
+      if(act[k]){if(has(s.ma,p))c+=" la";if(has(s.mb,p))c+=" ra";if(it.kind==="m"&&has(s.c,p))c+=" cmp"}
+      return `<span class="${c}">${x}</span>`}).join("");
+    // swap animation
+    if(prev&&act[k]&&it.kind==="m"){
+      const om=[];prev.forEach((id,p)=>om[id]=p);
+      const mv=[];
+      for(let j=0;j<vv.length;j++){const p=nd.l+j,d=p-om[next[p]];if(d)mv.push({k:j,d})}
+      if(mv.length){
+        const md=Math.max(...mv.map(m=>Math.abs(m.d)));
+        let lf=mv.filter(m=>Math.abs(m.d)===md&&m.d>0);if(!lf.length)lf=mv.filter(m=>Math.abs(m.d)===md);
+        const L=new Set(lf.map(m=>m.k));
+        mv.forEach(m=>{
+          const el=bx.children[m.k],w=el.offsetWidth,x0=-m.d*w,up=L.has(m.k)?-14:0;
+          el.classList.add("sw");el.style.zIndex=L.has(m.k)?3:1;
+          el.animate([{transform:`translate(${x0}px,0)`},{transform:`translate(${x0/2}px,${up}px)`,offset:.5},{transform:"translate(0,0)"}],{duration:animDur(),easing:"ease-in-out"});
+        });
+      }
+    }
+  });
+  edges.forEach((e,k)=>{
+    document.getElementById("me"+k).setAttribute("class",e.kind+(vis[e.b]?" on":"")+((act[e.a]||act[e.b])?" hot":""));
+  });
+  document.getElementById("tree").style.height=(maxRow*RH+TOP+NHt+14)+"px";
+}
+window.addEventListener("resize",()=>{
+  const S=ALGOS[current];if(!S||S.kind!=="merge"||!S.mt)return;
+  const t=document.getElementById("tree");if(!t)return;
+  const n=S.tree[0].k,W=Math.max(t.clientWidth,n*24);
+  if(Math.abs(W-S.mt.W)<2)return;
+  t.remove();buildMergeTree(S.tree,n,false);
+  const t2=document.getElementById("tree");t2.classList.add("nt");
+  show(idx,false);t2.offsetHeight;requestAnimationFrame(()=>t2.classList.remove("nt"));
+});
+
 /* ---- Heap Sort: array-টাকেই binary tree হিসেবে দেখানো ---- */
 function buildHeap(n){
   const RH=62,TOP=8,lv=Math.floor(Math.log2(n))+1,H=lv*RH+TOP+14;
@@ -638,7 +736,7 @@ function show(i,animate){
       a.onfinish=clr;a.oncancel=clr;
     }else el.style.zIndex="";
   });
-  if(s.tr)renderTree(s,animate?prev:null,next);
+  if(s.tr)(ALGOS[current].kind==="merge"?renderMergeTree:renderTree)(s,animate?prev:null,next);
   if(ALGOS[current].kind==="heap")renderHeap(s,animate?prev:null,next);
   setBanner(s,animate?prev:null);
   curOrder=next.slice();idx=i;
