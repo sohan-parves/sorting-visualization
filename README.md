@@ -46,8 +46,8 @@
 | **Merge Sort** | 🌳 Diamond tree (Divide ⬇ → Merge ⬆, arrow সহ) + bar |
 | **Quick Sort** | 🌳 Recursion tree (pivot-এর বাম / ডান অংশ) + bar |
 | **Heap Sort** | 🌳 Array-টা binary heap tree হিসেবে + bar |
-| Counting Sort | Bar animation + banner |
-| Radix Sort | Bar animation + banner |
+| **Counting Sort** | 📊 Count table (`cnt[v]`) — গোনার সময় বাড়ে, বসানোর সময় কমে + bar |
+| **Radix Sort** | 🪣 ০–৯ নম্বর digit bucket — element bucket-এ যায়, তারপর ক্রমে ফেরত আসে + bar |
 
 সবুজ মানে **sorted / নিজের চূড়ান্ত জায়গায় পৌঁছেছে**।
 
